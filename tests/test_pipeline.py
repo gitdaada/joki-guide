@@ -35,7 +35,11 @@ assert not a.is_hut({"name": "Autiotupa", "place": "locality"})[0]
 assert a.is_hut({"name": "Vanha autiotupa", "building": "hut"})[0]
 assert not a.is_hut({"tourism": "wilderness_hut", "name": "X", "ruins": "yes"})[0]
 d = a.describe({"capacity": "8", "fireplace": "yes", "operator": "Metsähallitus", "ele": "512"}, "autiotupa", "Lappi")
-assert d == "Autiotupa Lappi. Makuupaikkoja noin 8. Tulisija. Ylläpitäjä: Metsähallitus. Korkeus 512 m.", d
+assert d == "Autiotupa, Lappi. Makuupaikkoja noin 8. Tulisija. Ylläpitäjä: Metsähallitus. Korkeus 512 m.", d
+assert not a.is_hut({"tourism": "wilderness_hut", "name": "Nikon Laavu"})[0]
+assert a.hut_type("Kapusta päivätupa") == "paivatupa" and a.hut_type("Pallas avoin kota") == "kota"
+assert a.hut_type("Kotajärvi autiotupa") == "autiotupa" and a.hut_type("Áhkogoahti kammi") == "kammi"
+assert a.hut_type("Muorravaarakka varaus- ja autiotupa") == "autiotupa" and a.is_hut({"tourism": "wilderness_hut", "name": "Muorravaarakka varaus- ja autiotupa"})[0]
 assert a.safe_link({"website": "https://www.luontoon.fi/fi/kohteet/x"}) and not a.safe_link({"website": "http://luontoon.fi/x"})
 assert not a.safe_link({"website": "https://example.com/luontoon.fi"})
 print("autiotupien suodatus läpi")

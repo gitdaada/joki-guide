@@ -4,7 +4,8 @@ Ajetaan GitHub Actionsissa kerran kuukaudessa (.github/workflows/autiotuvat.yml)
 standardikirjasto ja julkinen Overpass-rajapinta, ei avaimia. Aineisto © OpenStreetMapin tekijät, ODbL.
 
 Mukaan otetaan tourism=wilderness_hut -kohteet sekä kohteet, joiden nimessä on "autiotupa" tai
-"autiokammi". Varaus- ja vuokratuvat jätetään pois, koska ne eivät ole vapaasti käytettävissä.
+"autiokammi". Varaus- ja vuokratuvat sekä laavut jätetään pois. Päivätuvat ja kodat merkitään omaksi
+tyypikseen, koska ne on tarkoitettu ensisijaisesti päiväkäyttöön.
 Kohteista tallennetaan vain tuvan tiedot (nimi, sijainti, varustus, ylläpitäjä), ei henkilötietoja.
 """
 import datetime as dt
@@ -22,6 +23,7 @@ OVERPASS = "https://overpass-api.de/api/interpreter"
 OUT = os.path.join(os.path.dirname(__file__), "..", "docs", "data", "autiotuvat.geojson")
 ALUEET = [("FI-10", "Lappi"), ("FI-05", "Kainuu")]
 POIS = re.compile(r"varaustupa|vuokratupa|vuokrakämppä|vuokrakota|varauskammi|vuokrakammi", re.I)
+TYYPIT = {"autiotupa": "Autiotupa", "kammi": "Autiokammi", "paivatupa": "Päivätupa", "kota": "Kota"}
 NIMI = re.compile(r"autiotupa|autiokammi|autiotuvat", re.I)
 LINKIT = ("luontoon.fi", "metsa.fi", "retkikartta.fi")
 
@@ -78,6 +80,8 @@ def is_hut(t):
             return False, "nimi viittaa tupaan, mutta kohde on muu (" + str(t.get("tourism") or t.get("amenity") or t.get("place") or t.get("highway") or "?") + ")"
     if POIS.search(name):
         return False, "varaus- tai vuokratupa"
+    if re.search(r"laavu", name, re.I) and not re.search(r"tupa|kammi", name, re.I):
+        return False, "laavu"
     if t.get("reservation") in ("required", "yes", "members_only"):
         return False, "varattava"
     if t.get("access") in ("private", "no"):
@@ -87,9 +91,23 @@ def is_hut(t):
     return True, ""
 
 
+def hut_type(name):
+    """autiotupa, kammi, paivatupa tai kota nimen perusteella (autiotupa voittaa, jos nimessä on molemmat)."""
+    if re.search(r"autiotupa|autiotuvat", name, re.I):
+        return "autiotupa"
+    if re.search(r"päivätupa", name, re.I):
+        return "paivatupa"
+    if re.search(r"kammi", name, re.I):
+        return "kammi"
+    if re.search(r"kota\b", name, re.I):
+        return "kota"
+    return "autiotupa"
+
+
 def describe(t, tyyppi, maakunta):
-    parts = ["Autiokammi" if tyyppi == "kammi" else "Autiotupa", maakunta + "."]
-    s = [" ".join(parts)]
+    s = ["%s, %s." % (TYYPIT[tyyppi], maakunta)]
+    if tyyppi == "paivatupa":
+        s.append("Tarkoitettu päiväkäyttöön, kuten taukoihin ja ruokailuun.")
     cap = num(t.get("capacity") or t.get("beds"))
     if cap:
         s.append("Makuupaikkoja noin %d." % cap)
@@ -135,9 +153,9 @@ def main():
             c = el.get("center") or {"lat": el.get("lat"), "lon": el.get("lon")}
             if c.get("lat") is None:
                 continue
-            tyyppi = "kammi" if re.search(r"kammi", name, re.I) else "autiotupa"
+            tyyppi = hut_type(name)
             props = {
-                "nimi": clean_text(name, 80) or ("Nimetön autiokammi" if tyyppi == "kammi" else "Nimetön autiotupa"),
+                "nimi": clean_text(name, 80) or "Nimetön " + TYYPIT[tyyppi].lower(),
                 "tyyppi": tyyppi,
                 "maakunta": maakunta,
                 "kuvaus": describe(t, tyyppi, maakunta),
