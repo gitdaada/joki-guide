@@ -1,0 +1,57 @@
+{
+ "paivitetty": "2026-10-21T11:03:10Z",
+ "joet": [
+  {
+   "id": "poroeno",
+   "nimi": "Poroeno",
+   "alue": "poroeno",
+   "luokka": null,
+   "menetelma": null
+  },
+  {
+   "id": "lataseno",
+   "nimi": "Lätäseno",
+   "alue": "poroeno",
+   "luokka": null,
+   "menetelma": null
+  },
+  {
+   "id": "hossanjoki",
+   "nimi": "Hossanjoki",
+   "alue": "hossa",
+   "luokka": null,
+   "menetelma": null
+  },
+  {
+   "id": "somerjoki",
+   "nimi": "Somerjoki",
+   "alue": "hossa",
+   "luokka": null,
+   "menetelma": null
+  }
+ ],
+ "geometriat": [
+  "layers/poroeno-joet.geojson",
+  "layers/hossa-joet.geojson"
+ ],
+ "lahteet": [
+  "Syke, Hydrologiarajapinta (CC BY 4.0)",
+  "Ilmatieteen laitos, avoin data (CC BY 4.0)",
+  "Uomat © OpenStreetMapin tekijät (ODbL)"
+ ],
+ "loki": [
+  "Syke: suureita ei saatu: <HTTPError 400: 'Bad Request'>",
+  "poroeno: 8 uomaa haettu",
+  "poroeno: Syken asemia ei saatu: <HTTPError 400: 'Bad Request'>",
+  "poroeno: asemaehdokkaat ei yhtään",
+  "poroeno: None (None)",
+  "lataseno: asemaehdokkaat ei yhtään",
+  "lataseno: None (None)",
+  "hossa: 4 uomaa haettu",
+  "hossa: Syken asemia ei saatu: <HTTPError 400: 'Bad Request'>",
+  "hossanjoki: asemaehdokkaat ei yhtään",
+  "hossanjoki: None (None)",
+  "somerjoki: asemaehdokkaat ei yhtään",
+  "somerjoki: None (None)"
+ ]
+}
