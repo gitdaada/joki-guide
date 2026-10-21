@@ -21,7 +21,9 @@ Versio 0.2 on testiversio. Testialueina ovat Poroeno Käsivarren erämaa-alueell
 
 ## Käyttöönotto
 
-1. **GitHub Pages:** repon *Settings → Pages → Build and deployment*: Source **Deploy from a branch**, Branch **main**, kansio **/docs** → *Save*. Sovellus on hetken päästä osoitteessa `https://<käyttäjänimi>.github.io/joki-opas/`.
+1. **Julkaisu Cloudflare Pagesissa:** *Workers & Pages → Create application → Pages → Connect to Git* → GitHub. Anna Cloudflarelle pääsy vain tähän repoon (*Only select repositories*). Asetukset: Production branch **main**, Framework preset **None**, Build command tyhjä, Build output directory **docs**. Sovellus julkaistaan osoitteeseen `https://<projektin-nimi>.pages.dev/`, ja jokainen push päivittää sen.
+
+   Sovellukselle tarvitaan oma osoite. Android-Chrome asentaa samasta osoitteesta vain yhden sovelluksen, joten esimerkiksi `käyttäjänimi.github.io/sovellus/` ei asennu, jos samassa osoitteessa on jo toinen asennettu sovellus.
 2. **Puhelin:** avaa osoite Chromessa ja valitse ⋮ → *Asenna sovellus*.
 3. **MML:n API-avain:** hae ilmainen avain [Maanmittauslaitokselta](https://www.maanmittauslaitos.fi/rajapinnat/api-avaimen-ohje) ja syötä se sovelluksen asetuksiin. Avain tallentuu vain puhelimeen.
 4. **Offline:** avaa *Tasot* → *Tallenna offline* kotona Wi-Fissä ennen reissua.
@@ -47,7 +49,7 @@ Ajon voi käynnistää käsin: *Actions → Vesitilanne → Run workflow*. GitHu
 
 ## Rakenne
 
-- `docs/`: sovellus, jonka GitHub Pages julkaisee
+- `docs/`: sovellus, jonka Cloudflare Pages julkaisee (`docs/_headers` = HTTP-turvaotsakkeet)
   - `core.js`: laskenta ilman käyttöliittymää (etäisyys, koordinaatit, aurinko, sää, perhosuositus)
   - `app.js`: käyttöliittymä
   - `sw.js`: service worker, joka pitää sovelluksen ja tallennetut kartat käytettävissä ilman verkkoa

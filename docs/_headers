@@ -1,0 +1,12 @@
+# Cloudflare Pages: HTTP-otsakkeet. Sisältöturvakäytäntö (CSP) on index.html:ssä.
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(), microphone=(), payment=(), usb=()
+
+/sw.js
+  Cache-Control: no-cache
+
+/data/vesitilanne.json
+  Cache-Control: no-cache
