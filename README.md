@@ -2,6 +2,8 @@
 
 Offline-toimiva karttasovellus eränkäyntiin ja jokikalastukseen. Asennetaan puhelimeen selaimen kautta.
 
+Sovellus: https://joki-opas.pages.dev/
+
 Versio 0.2 on testiversio. Testialueina ovat Poroeno Käsivarren erämaa-alueella ja Hossanjoki Hossassa.
 
 ## Toiminnot
