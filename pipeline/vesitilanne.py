@@ -22,7 +22,7 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 
-UA = "joki-guide/0.2 (+https://github.com/gitdaada/joki-guide)"
+UA = "joki-opas/0.2 (+https://github.com/gitdaada/joki-opas)"
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONFIG = os.path.join(ROOT, "pipeline", "joet.json")
 OUT = os.path.join(ROOT, "docs", "data", "vesitilanne.json")

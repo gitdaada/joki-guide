@@ -21,7 +21,7 @@ Versio 0.2 on testiversio. Testialueina ovat Poroeno Käsivarren erämaa-alueell
 
 ## Käyttöönotto
 
-1. **GitHub Pages:** repon *Settings → Pages → Build and deployment*: Source **Deploy from a branch**, Branch **main**, kansio **/docs** → *Save*. Sovellus on hetken päästä osoitteessa `https://<käyttäjänimi>.github.io/joki-guide/`.
+1. **GitHub Pages:** repon *Settings → Pages → Build and deployment*: Source **Deploy from a branch**, Branch **main**, kansio **/docs** → *Save*. Sovellus on hetken päästä osoitteessa `https://<käyttäjänimi>.github.io/joki-opas/`.
 2. **Puhelin:** avaa osoite Chromessa ja valitse ⋮ → *Asenna sovellus*.
 3. **MML:n API-avain:** hae ilmainen avain [Maanmittauslaitokselta](https://www.maanmittauslaitos.fi/rajapinnat/api-avaimen-ohje) ja syötä se sovelluksen asetuksiin. Avain tallentuu vain puhelimeen.
 4. **Offline:** avaa *Tasot* → *Tallenna offline* kotona Wi-Fissä ennen reissua.
@@ -106,7 +106,7 @@ Sovellus ja sen lähdekoodi ovat julkisesti nähtävillä, mutta niitä ei saa k
   - sovelluksen tai siitä muokatun version julkaiseminen sovelluskaupassa (esim. App Store tai Google Play) tai muuten maksullisena, mainosrahoitteisena tai tilauspohjaisena
   - sovelluksen tai sen osien käyttäminen osana kaupallista tuotetta tai palvelua, kuten maksullista opastus-, erä- tai kalastusmatkailupalvelua
   - sovelluksen myyminen tai lisensoiminen eteenpäin.
-- Luvasta, sen ehdoista ja mahdollisesta rojaltijaosta sovitaan tapauskohtaisesti erikseen kirjallisesti. Lupaa voi pyytää avaamalla [issuen](https://github.com/gitdaada/joki-guide/issues).
+- Luvasta, sen ehdoista ja mahdollisesta rojaltijaosta sovitaan tapauskohtaisesti erikseen kirjallisesti. Lupaa voi pyytää avaamalla [issuen](https://github.com/gitdaada/joki-opas/issues).
 - Kopioissa ja muokatuissa versioissa on säilytettävä LICENSE-tiedosto ja sen alussa oleva `Required Notice` -rivi.
 - Poikkeus: `docs/vendor/leaflet/` on Leaflet-kirjasto, jota koskee sen oma BSD 2-Clause -lisenssi ([docs/vendor/leaflet/LICENSE](docs/vendor/leaflet/LICENSE)).
 
