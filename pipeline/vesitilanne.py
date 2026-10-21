@@ -165,7 +165,7 @@ def odata_query(params):
 
 
 def syke_json(path, params):
-    url = SYKE + "/" + path + "?" + odata_query(dict(params, **{"$format": "json"}))
+    url = SYKE + "/" + path + ("?" + odata_query(params) if params else "")  # $format ei ole sallittu, JSON on oletus
     rows, pages = [], 0
     while url and pages < 80:
         j = json.loads(get(url))
@@ -197,13 +197,12 @@ def syke_stations(area):
     nmin, nmax = min(c[0] for c in corners), max(c[0] for c in corners)
     emin, emax = min(c[1] for c in corners), max(c[1] for c in corners)
     flt = "KoordErTmPohj ge %d and KoordErTmPohj le %d and KoordErTmIta ge %d and KoordErTmIta le %d" % (nmin, nmax, emin, emax)
-    sel = "Paikka_Id,Suure_Id,Nimi,KoordLat,KoordLong,JarviNimi,VesalNimi,Tila_Id"
-    return syke_json("Paikka", {"$filter": flt, "$select": sel})
+    return syke_json("Paikka", {"$filter": flt})
 
 
 def syke_series(entity, pid, since):
     rows = syke_json(entity, {"$filter": "Paikka_Id eq %d and Aika ge datetime'%s'" % (pid, since.isoformat()),
-                              "$select": "Aika,Arvo", "$orderby": "Aika"})
+                              "$orderby": "Aika"})
     out = []
     for r in rows:
         d, v = parse_time(r.get("Aika")), r.get("Arvo")
@@ -216,13 +215,15 @@ def syke_status(river, gj, stations, today):
     pts = river_points(gj, river["id"])
     if not pts:
         return None
+    tm = [to_tm35(p[1], p[0]) for p in pts]
     cands = []
     for st in stations:
         try:
-            lat, lon = float(str(st["KoordLat"]).replace(",", ".")), float(str(st["KoordLong"]).replace(",", "."))
-        except (TypeError, ValueError):
+            sn, se = float(st["KoordErTmPohj"]), float(st["KoordErTmIta"])
+        except (TypeError, ValueError, KeyError):
             continue
-        d = min(dist_km(lat, lon, p[1], p[0]) for p in pts)
+        d = min(math.hypot(sn - n, se - e) for (n, e) in tm) / 1000.0
+        lat = lon = None
         name = SUURE.get(st.get("Suure_Id"), ("", ""))[0].lower()
         if d > NEAR_KM or not ("virtaama" in name or "vedenkorkeus" in name):
             continue
@@ -261,21 +262,26 @@ def fmi_daily_rain(params):
     q = dict({"service": "WFS", "version": "2.0.0", "request": "getFeature",
               "storedquery_id": "fmi::observations::weather::daily::timevaluepair", "parameters": "rrday"}, **params)
     x = get(FMI + "?" + urllib.parse.urlencode(q))
+    return parse_fmi_tvp(x)
+
+
+def parse_fmi_tvp(x):
+    """FMI:n timevaluepair-XML -> {fmisid: {nimi, pos, arvot}}. ElementTree tukee {*}-jokerimerkkiä vain iterfindissä."""
     root = ET.fromstring(x)
     out = {}
-    for obs in root.iter("{*}PointTimeSeriesObservation"):
+    for obs in root.iterfind(".//{*}PointTimeSeriesObservation"):
         name, fmisid, pos = None, None, None
-        for loc in obs.iter("{*}Location"):
-            for idn in loc.iter("{*}identifier"):
+        for loc in obs.iterfind(".//{*}Location"):
+            for idn in loc.iterfind("{*}identifier"):
                 fmisid = (idn.text or "").strip()
-            for nm in loc.iter("{*}name"):
-                if "name" in (nm.get("codeSpace") or ""):
+            for nm in loc.iterfind("{*}name"):
+                if (nm.get("codeSpace") or "").endswith("/name"):
                     name = (nm.text or "").strip()
-        for p in obs.iter("{*}pos"):
+        for p in obs.iterfind(".//{*}pos"):
             pos = [float(v) for v in p.text.split()[:2]]
             break
         vals = []
-        for tvp in obs.iter("{*}MeasurementTVP"):
+        for tvp in obs.iterfind(".//{*}MeasurementTVP"):
             v = tvp.find("{*}value")
             try:
                 f = float(v.text)
@@ -307,9 +313,11 @@ def rain_status(river, gj, today):
         if best is None or d < best[0]:
             best = (d, fid, st)
     if not best:
+        note("%s: ei sääasemaa, jolla 14 vrk sadetiedot (%d asemaa haussa)" % (river["id"], len(now)))
         return None
     d, fid, st = best
     total = round(sum(st["arvot"]), 1)
+    note("%s: sadeasema %s (%.0f km), 14 vrk %.1f mm" % (river["id"], st["nimi"], d, total))
     sums = []
     for k in range(1, RAIN_YEARS + 1):
         try:
