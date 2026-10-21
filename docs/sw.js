@@ -1,10 +1,10 @@
 /* Joki guiden service worker: sovellus, tasot ja tallennetut kartat toimivat ilman verkkoa. */
 'use strict';
 
-var SHELL_CACHE = 'jg-shell-0.2.4';
+var SHELL_CACHE = 'jg-shell-0.2.5';
 var TILE_CACHE = 'jg-tiles-v1';
 var SHELL = [
-  './', 'index.html', 'app.js', 'core.js', 'style.css', 'manifest.webmanifest',
+  './', 'app.js', 'core.js', 'style.css', 'manifest.webmanifest',
   'vendor/leaflet/leaflet.js', 'vendor/leaflet/leaflet.css',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
   'layers/index.json', 'layers/poroeno.geojson', 'layers/hossa.geojson', 'data/perhot.json',
@@ -13,10 +13,21 @@ var SHELL = [
   'img/perhot/surviainen.svg', 'img/perhot/putkiperho.svg'
 ];
 
+/** Uudelleenohjattua vastausta ei saa käyttää sivulatauksessa (esim. Cloudflare ohjaa index.html -> /), joten kopioidaan se puhtaaksi. */
+function clean(r) {
+  if (!r.redirected) return Promise.resolve(r);
+  return r.blob().then(function (b) { return new Response(b, { status: r.status, statusText: r.statusText, headers: r.headers }); });
+}
+
 self.addEventListener('install', function (e) {
-  e.waitUntil(caches.open(SHELL_CACHE)
-    .then(function (c) { return c.addAll(SHELL.map(function (u) { return new Request(u, { cache: 'reload' }); })); })
-    .then(function () { return self.skipWaiting(); }));
+  e.waitUntil(caches.open(SHELL_CACHE).then(function (c) {
+    return Promise.all(SHELL.map(function (u) {
+      return fetch(new Request(u, { cache: 'reload' })).then(function (r) {
+        if (!r.ok) throw new Error(u + ' ' + r.status);
+        return clean(r);
+      }).then(function (r) { return c.put(u, r); });
+    }));
+  }).then(function () { return self.skipWaiting(); }));
 });
 
 self.addEventListener('activate', function (e) {
@@ -44,11 +55,11 @@ function tileResponse(request, url) {
 function staleWhileRevalidate(event, request) {
   return caches.open(SHELL_CACHE).then(function (cache) {
     return cache.match(request, { ignoreSearch: true }).then(function (hit) {
-      var net = fetch(request, { cache: 'no-cache' }).then(function (r) {
+      var net = fetch(request, { cache: 'no-cache' }).then(clean).then(function (r) {
         if (r.ok && r.type === 'basic') cache.put(request, r.clone());
         return r;
       });
-      if (hit) { event.waitUntil(net.catch(function () {})); return hit; }
+      if (hit) { event.waitUntil(net.catch(function () {})); return clean(hit); }
       return net.catch(function () { return new Response('', { status: 504, statusText: 'Offline' }); });
     });
   });
@@ -80,7 +91,7 @@ self.addEventListener('fetch', function (e) {
   if (req.mode === 'navigate') {
     // Vain sovelluksen oma etusivu tulee välimuistista; muut sivut saman polun alla haetaan verkosta.
     var rel = url.pathname.slice(new URL(self.registration.scope).pathname.length);
-    if (rel === '' || rel === 'index.html') e.respondWith(staleWhileRevalidate(e, new Request('index.html')));
+    if (rel === '' || rel === 'index.html') e.respondWith(staleWhileRevalidate(e, new Request('./')));
     return;
   }
   if (/\/data\/vesitilanne\.json$/.test(url.pathname)) { e.respondWith(networkFirst(req)); return; }

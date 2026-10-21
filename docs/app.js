@@ -3,7 +3,7 @@
   'use strict';
 
   var JG = window.JG;
-  var VERSION = '0.2.4';
+  var VERSION = '0.2.5';
   var MML_BASE = 'https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0';
   var MML_LAYERS = {
     maastokartta: { path: 'maastokartta', ext: 'png', estKB: 20, name: 'Maastokartta' },
@@ -114,8 +114,9 @@
       });
     } else {
       // Ilman avainta OpenStreetMap, vain verkossa (OSM ei salli karttojen joukkolatausta).
+      // OSM:n käyttöehdot vaativat lähettävän sivun tiedon: kerrotaan vain sovelluksen osoite, ei sivun polkua.
       base = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 18, attribution: '© OpenStreetMapin tekijät'
+        maxZoom: 18, referrerPolicy: 'strict-origin-when-cross-origin', attribution: '© OpenStreetMapin tekijät'
       });
     }
     base.addTo(map);
