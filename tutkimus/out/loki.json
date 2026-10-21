@@ -1,0 +1,27 @@
+[
+ {
+  "vaihe": "syke_suure",
+  "ok": false,
+  "virhe": "<HTTPError 400: 'Bad Request'>"
+ },
+ {
+  "vaihe": "syke_paikat",
+  "ok": false,
+  "virhe": "<HTTPError 400: 'Bad Request'>"
+ },
+ {
+  "vaihe": "syke_testi",
+  "ok": false,
+  "virhe": "FileNotFoundError(2, 'No such file or directory')"
+ },
+ {
+  "vaihe": "commons",
+  "ok": true,
+  "s": 49.5
+ },
+ {
+  "vaihe": "commons_cats",
+  "ok": true,
+  "s": 24.8
+ }
+]
