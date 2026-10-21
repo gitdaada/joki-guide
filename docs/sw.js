@@ -1,7 +1,7 @@
 /* Joki guiden service worker: sovellus, tasot ja tallennetut kartat toimivat ilman verkkoa. */
 'use strict';
 
-var SHELL_CACHE = 'jg-shell-0.2.0';
+var SHELL_CACHE = 'jg-shell-0.2.1';
 var TILE_CACHE = 'jg-tiles-v1';
 var SHELL = [
   './', 'index.html', 'app.js', 'core.js', 'style.css', 'manifest.webmanifest',
