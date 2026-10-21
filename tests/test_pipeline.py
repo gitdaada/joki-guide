@@ -25,3 +25,17 @@ x = open(os.path.join(os.path.dirname(__file__), "fixtures", "fmi_daily_tvp.xml"
 r = v.parse_fmi_tvp(x)
 assert r == {"999001": {"nimi": "Testiasema", "pos": [65.4, 29.5], "arvot": [2.5, 0.0, 4.0]}}, r
 print("FMI-jäsennys läpi")
+
+# Autiotupien suodatus ja kuvaus
+import autiotuvat as a  # noqa: E402
+assert a.is_hut({"tourism": "wilderness_hut", "name": "Pihtsusjärven autiotupa"})[0]
+assert not a.is_hut({"tourism": "wilderness_hut", "name": "Pihtsusjärven varaustupa"})[0]
+assert not a.is_hut({"tourism": "wilderness_hut", "name": "Testitupa", "reservation": "required"})[0]
+assert not a.is_hut({"name": "Autiotupa", "place": "locality"})[0]
+assert a.is_hut({"name": "Vanha autiotupa", "building": "hut"})[0]
+assert not a.is_hut({"tourism": "wilderness_hut", "name": "X", "ruins": "yes"})[0]
+d = a.describe({"capacity": "8", "fireplace": "yes", "operator": "Metsähallitus", "ele": "512"}, "autiotupa", "Lappi")
+assert d == "Autiotupa Lappi. Makuupaikkoja noin 8. Tulisija. Ylläpitäjä: Metsähallitus. Korkeus 512 m.", d
+assert a.safe_link({"website": "https://www.luontoon.fi/fi/kohteet/x"}) and not a.safe_link({"website": "http://luontoon.fi/x"})
+assert not a.safe_link({"website": "https://example.com/luontoon.fi"})
+print("autiotupien suodatus läpi")

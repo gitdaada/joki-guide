@@ -1,0 +1,33 @@
+# Päivittää Lapin ja Kainuun autiotuvat (docs/data/autiotuvat.geojson) OpenStreetMapista kerran kuukaudessa.
+# Vain julkinen Overpass-rajapinta, ei salaisuuksia eikä avaimia.
+name: Autiotuvat
+on:
+  schedule:
+    - cron: "41 3 2 * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [pipeline/autiotuvat.py]
+permissions:
+  contents: write
+concurrency:
+  group: autiotuvat
+  cancel-in-progress: false
+jobs:
+  paivita:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Hae autiotuvat
+        run: python3 pipeline/autiotuvat.py
+      - name: Tallenna muutokset
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/autiotuvat.geojson
+          git commit -m "Autiotuvat päivitetty" || exit 0
+          git pull --rebase -X theirs -q origin main
+          git push
