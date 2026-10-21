@@ -1,21 +1,21 @@
-name: Selvitysajo
+name: Vesitilanne (testi)
 on:
   push:
     branches: [tutkimus]
-    paths: [tutkimus/tutki.py, .github/workflows/tutkimus.yml]
+    paths: [pipeline/**, .github/workflows/vesitesti.yml]
 permissions:
   contents: write
 jobs:
-  tutki:
+  vesi:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
-      - run: python3 tutkimus/tutki.py
+      - run: python3 pipeline/vesitilanne.py
       - name: Tallenna tulokset
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add tutkimus/out
-          git commit -m "Selvitysajon tulokset" || echo "ei muutoksia"
+          git add docs/data docs/layers
+          git commit -m "Vesitilanne (testi)" || echo "ei muutoksia"
           git push
