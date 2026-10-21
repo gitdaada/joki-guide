@@ -1,21 +1,20 @@
-name: Vesitilanne (testi)
+name: Vianetsinta
 on:
   push:
     branches: [tutkimus]
-    paths: [pipeline/**, .github/workflows/vesitesti.yml]
+    paths: [tutkimus/debug.py, .github/workflows/vesitesti.yml]
 permissions:
   contents: write
 jobs:
-  vesi:
+  debug:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
-      - run: python3 pipeline/vesitilanne.py
-      - name: Tallenna tulokset
-        run: |
+      - run: python3 tutkimus/debug.py
+      - run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/data docs/layers
-          git commit -m "Vesitilanne (testi)" || echo "ei muutoksia"
+          git add tutkimus/out/debug.json
+          git commit -m "Vianetsinnän tulokset" || echo "ei muutoksia"
           git push
