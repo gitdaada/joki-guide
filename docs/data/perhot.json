@@ -1,94 +1,382 @@
 {
-  "versio": 1,
-  "huom": "Lähtötaulukko yleisesti käytetyistä perhoista. Tarkista ja korjaa omasta kokemuksesta.",
-  "ryhmat": {
-    "paivankorennot": {
-      "nimi": "Päivänkorennot",
-      "vaiheet": {
-        "pohjalla": { "nimi": "Nymfi", "syvyys": "Pohja", "kuva": "nymfi.svg",
-          "kuvaus": "Nymfit elävät pohjakivikossa ja irtoavat virtaan ennen kuoriutumista.",
-          "perhot": [{ "nimi": "Pheasant Tail", "koko": "14–18" }, { "nimi": "Hare's Ear -nymfi", "koko": "12–16" }] },
-        "nousussa": { "nimi": "Nouseva nymfi", "syvyys": "Vesipatsas", "kuva": "nymfi.svg",
-          "kuvaus": "Kuoriutumaan lähtevä nymfi nousee kohti pintaa.",
-          "perhot": [{ "nimi": "Soft hackle", "koko": "14–16" }] },
-        "pinturi": { "nimi": "Pinturi", "syvyys": "Pintakalvo", "kuva": "pinturi.svg",
-          "kuvaus": "Kuoriutuva korento pintakalvossa ennen kuin se nousee siivilleen.",
-          "perhot": [{ "nimi": "Klinkhamer", "koko": "14–16" }, { "nimi": "CDC-emerger", "koko": "14–18" }] },
-        "aikuinen": { "nimi": "Aikuinen", "syvyys": "Pinta", "kuva": "aikuinen-korento.svg",
-          "kuvaus": "Munivat ja kuolleet naaraat pinnalla, usein iltaisin.",
-          "perhot": [{ "nimi": "Spentti, siivet levällään", "koko": "14–18" }] }
+ "versio": 1,
+ "huom": "Lähtötaulukko yleisesti käytetyistä perhoista. Tarkista ja korjaa omasta kokemuksesta. Kuvat: Wikimedia Commons.",
+ "ryhmat": {
+  "paivankorennot": {
+   "nimi": "Päivänkorennot",
+   "vaiheet": {
+    "pohjalla": {
+     "nimi": "Nymfi",
+     "syvyys": "Pohja",
+     "kuva": "nymfi.svg",
+     "kuvaus": "Nymfit elävät pohjakivikossa ja irtoavat virtaan ennen kuoriutumista.",
+     "perhot": [
+      {
+       "nimi": "Pheasant Tail",
+       "koko": "14–18",
+       "kuva": "kuvat/pheasant-tail.jpg",
+       "kuvaaja": "Mike Cline",
+       "lisenssi": "CC BY-SA 4.0",
+       "lahde": "https://commons.wikimedia.org/wiki/File:American_Pheasant_Tail_Nymph_02.jpg"
+      },
+      {
+       "nimi": "Hare's Ear -nymfi",
+       "koko": "12–16",
+       "kuva": "kuvat/hares-ear.jpg",
+       "kuvaaja": "Waldemarpaetz",
+       "lisenssi": "CC BY-SA 4.0",
+       "lahde": "https://commons.wikimedia.org/wiki/File:Gold_ribbed_hairs_ear_trout_fly.JPG"
       }
+     ]
     },
-    "vesiperhoset": {
-      "nimi": "Vesiperhoset",
-      "vaiheet": {
-        "pohjalla": { "nimi": "Toukka", "syvyys": "Pohja", "kuva": "toukka.svg",
-          "kuvaus": "Toukka elää pohjassa kotelossa tai vapaana.",
-          "perhot": [{ "nimi": "Kotelollisen toukan imitaatio", "koko": "10–14" }, { "nimi": "Vapaana elävän toukan imitaatio", "koko": "12–14" }] },
-        "nousussa": { "nimi": "Kotelo", "syvyys": "Vesipatsas", "kuva": "kotelo.svg",
-          "kuvaus": "Kotelo nousee pintaan kuoriutumaan.",
-          "perhot": [{ "nimi": "Soft hackle", "koko": "12–16" }, { "nimi": "Kotelo-imitaatio (pupa)", "koko": "12–16" }] },
-        "pinturi": { "nimi": "Pinturi", "syvyys": "Pintakalvo", "kuva": "pinturi.svg",
-          "kuvaus": "Pinnalla kuoriutuva aikuinen ennen lentoonlähtöä.",
-          "perhot": [{ "nimi": "CDC-vesiperhonen", "koko": "12–16" }] },
-        "aikuinen": { "nimi": "Aikuinen", "syvyys": "Pinta", "kuva": "aikuinen-vesiperhonen.svg",
-          "kuvaus": "Aikuiset ja munivat naaraat veden pinnalla.",
-          "perhot": [{ "nimi": "Elk Hair Caddis", "koko": "12–16" }] }
+    "nousussa": {
+     "nimi": "Nouseva nymfi",
+     "syvyys": "Vesipatsas",
+     "kuva": "nymfi.svg",
+     "kuvaus": "Kuoriutumaan lähtevä nymfi nousee kohti pintaa.",
+     "perhot": [
+      {
+       "nimi": "Soft hackle",
+       "koko": "14–16",
+       "kuva": "kuvat/partridge-and-orange.jpg",
+       "kuvaaja": "Mike Cline",
+       "lisenssi": "Public domain",
+       "lahde": "https://commons.wikimedia.org/wiki/File:PartridgeandOrange.jpg",
+       "kuvassa": "Partridge and Orange"
       }
+     ]
     },
-    "koskikorennot": {
-      "nimi": "Koskikorennot",
-      "huom": "Koskikorento kuoriutuu kivillä vedestä noustuaan, joten pinturivaihetta ei ole.",
-      "vaiheet": {
-        "pohjalla": { "nimi": "Nymfi", "syvyys": "Pohja", "kuva": "nymfi.svg",
-          "kuvaus": "Nymfit elävät virtapaikkojen kivikossa.",
-          "perhot": [{ "nimi": "Painotettu koskikorentonymfi", "koko": "8–12" }] },
-        "nousussa": { "nimi": "Rannalle ryömivä nymfi", "syvyys": "Pohja rannan tuntumassa", "kuva": "nymfi.svg",
-          "kuvaus": "Kuoriutumaan lähtevä nymfi ryömii pohjaa pitkin rantakiville.",
-          "perhot": [{ "nimi": "Painotettu koskikorentonymfi", "koko": "8–12" }] },
-        "aikuinen": { "nimi": "Muniva naaras", "syvyys": "Pinta", "kuva": "aikuinen-koskikorento.svg",
-          "kuvaus": "Naaraat palaavat veden pinnalle munimaan.",
-          "perhot": [{ "nimi": "Stimulator", "koko": "10–14" }] }
+    "pinturi": {
+     "nimi": "Pinturi",
+     "syvyys": "Pintakalvo",
+     "kuva": "pinturi.svg",
+     "kuvaus": "Kuoriutuva korento pintakalvossa ennen kuin se nousee siivilleen.",
+     "perhot": [
+      {
+       "nimi": "Klinkhamer",
+       "koko": "14–16",
+       "kuva": "kuvat/parachute-adams.jpg",
+       "kuvaaja": "Freyfisher",
+       "lisenssi": "CC BY-SA 2.0",
+       "lahde": "https://commons.wikimedia.org/wiki/File:Parachute_Adams_Dry_Fly.jpg",
+       "kuvassa": "Parachute Adams, samantyyppinen parachute-perho"
+      },
+      {
+       "nimi": "CDC-emerger",
+       "koko": "14–18",
+       "kuva": "kuvat/cdc-olive.jpg",
+       "kuvaaja": "Mike Cline",
+       "lisenssi": "CC BY-SA 4.0",
+       "lahde": "https://commons.wikimedia.org/wiki/File:BWO_CDC_Winged_Olive_Biot.jpg",
+       "kuvassa": "CDC-siipinen olive"
       }
+     ]
     },
-    "surviaiset": {
-      "nimi": "Surviaiset",
-      "vaiheet": {
-        "pohjalla": { "nimi": "Toukka", "syvyys": "Pohja", "kuva": "toukka.svg",
-          "kuvaus": "Toukka elää pohjan pehmeikössä.",
-          "perhot": [{ "nimi": "Surviaisen toukka", "koko": "14–18" }] },
-        "nousussa": { "nimi": "Kotelo", "syvyys": "Vesipatsas", "kuva": "kotelo.svg",
-          "kuvaus": "Kotelo nousee hitaasti pintaan.",
-          "perhot": [{ "nimi": "Buzzer", "koko": "16–20" }] },
-        "pinturi": { "nimi": "Pinturi", "syvyys": "Pintakalvo", "kuva": "pinturi.svg",
-          "kuvaus": "Kotelo pintakalvossa, aikuinen kuoriutumassa.",
-          "perhot": [{ "nimi": "CDC-surviaisemerger", "koko": "16–20" }] },
-        "aikuinen": { "nimi": "Aikuinen", "syvyys": "Pinta", "kuva": "surviainen.svg",
-          "kuvaus": "Aikuiset surviaiset pinnalla.",
-          "perhot": [{ "nimi": "Griffith's Gnat", "koko": "18–22" }] }
+    "aikuinen": {
+     "nimi": "Aikuinen",
+     "syvyys": "Pinta",
+     "kuva": "aikuinen-korento.svg",
+     "kuvaus": "Munivat ja kuolleet naaraat pinnalla, usein iltaisin.",
+     "perhot": [
+      {
+       "nimi": "Spentti, siivet levällään",
+       "koko": "14–18",
+       "kuva": "kuvat/red-spinner.jpg",
+       "kuvaaja": "Jan Doné",
+       "lisenssi": "CC BY 3.0",
+       "lahde": "https://commons.wikimedia.org/wiki/File:%C4%8Cerven%C3%A1_jepice_modifikace_Red_Spinner_IMG_1076.JPG",
+       "kuvassa": "Red Spinner"
       }
+     ]
     }
+   }
   },
-  "lajit": {
-    "harjus": { "nimi": "Harjus", "ryhmat": ["paivankorennot", "vesiperhoset", "koskikorennot", "surviaiset"], "koot": "14–18",
-      "lisa": "Painotus pinturiin ja nousevaan vaiheeseen." },
-    "taimen": { "nimi": "Taimen", "ryhmat": ["vesiperhoset", "koskikorennot", "paivankorennot"], "koot": "8–16",
-      "lisa": "Lisäksi streamerit; Lapissa hiiriperho hämärässä." },
-    "siika": { "nimi": "Siika", "ryhmat": ["surviaiset", "paivankorennot"], "koot": "16–20",
-      "lisa": "Pienet perhot, painotus koteloon ja pinturiin." },
-    "lohi": { "nimi": "Lohi", "ryhmat": [], "lohi": true }
+  "vesiperhoset": {
+   "nimi": "Vesiperhoset",
+   "vaiheet": {
+    "pohjalla": {
+     "nimi": "Toukka",
+     "syvyys": "Pohja",
+     "kuva": "toukka.svg",
+     "kuvaus": "Toukka elää pohjassa kotelossa tai vapaana.",
+     "perhot": [
+      {
+       "nimi": "Kotelollisen toukan imitaatio",
+       "koko": "10–14"
+      },
+      {
+       "nimi": "Vapaana elävän toukan imitaatio",
+       "koko": "12–14"
+      }
+     ]
+    },
+    "nousussa": {
+     "nimi": "Kotelo",
+     "syvyys": "Vesipatsas",
+     "kuva": "kotelo.svg",
+     "kuvaus": "Kotelo nousee pintaan kuoriutumaan.",
+     "perhot": [
+      {
+       "nimi": "Soft hackle",
+       "koko": "12–16",
+       "kuva": "kuvat/partridge-and-orange.jpg",
+       "kuvaaja": "Mike Cline",
+       "lisenssi": "Public domain",
+       "lahde": "https://commons.wikimedia.org/wiki/File:PartridgeandOrange.jpg",
+       "kuvassa": "Partridge and Orange"
+      },
+      {
+       "nimi": "Kotelo-imitaatio (pupa)",
+       "koko": "12–16"
+      }
+     ]
+    },
+    "pinturi": {
+     "nimi": "Pinturi",
+     "syvyys": "Pintakalvo",
+     "kuva": "pinturi.svg",
+     "kuvaus": "Pinnalla kuoriutuva aikuinen ennen lentoonlähtöä.",
+     "perhot": [
+      {
+       "nimi": "CDC-vesiperhonen",
+       "koko": "12–16"
+      }
+     ]
+    },
+    "aikuinen": {
+     "nimi": "Aikuinen",
+     "syvyys": "Pinta",
+     "kuva": "aikuinen-vesiperhonen.svg",
+     "kuvaus": "Aikuiset ja munivat naaraat veden pinnalla.",
+     "perhot": [
+      {
+       "nimi": "Elk Hair Caddis",
+       "koko": "12–16",
+       "kuva": "kuvat/elk-hair-caddis.jpg",
+       "kuvaaja": "Mike Cline",
+       "lisenssi": "CC BY-SA 4.0",
+       "lahde": "https://commons.wikimedia.org/wiki/File:Elk_Hair_Caddis2.jpg"
+      }
+     ]
+    }
+   }
+  },
+  "koskikorennot": {
+   "nimi": "Koskikorennot",
+   "huom": "Koskikorento kuoriutuu kivillä vedestä noustuaan, joten pinturivaihetta ei ole.",
+   "vaiheet": {
+    "pohjalla": {
+     "nimi": "Nymfi",
+     "syvyys": "Pohja",
+     "kuva": "nymfi.svg",
+     "kuvaus": "Nymfit elävät virtapaikkojen kivikossa.",
+     "perhot": [
+      {
+       "nimi": "Painotettu koskikorentonymfi",
+       "koko": "8–12",
+       "kuva": "kuvat/montana-stone.jpg",
+       "kuvaaja": "Mike Cline",
+       "lisenssi": "Public domain",
+       "lahde": "https://commons.wikimedia.org/wiki/File:BrooksMontanaStone.jpg",
+       "kuvassa": "Montana Stone"
+      }
+     ]
+    },
+    "nousussa": {
+     "nimi": "Rannalle ryömivä nymfi",
+     "syvyys": "Pohja rannan tuntumassa",
+     "kuva": "nymfi.svg",
+     "kuvaus": "Kuoriutumaan lähtevä nymfi ryömii pohjaa pitkin rantakiville.",
+     "perhot": [
+      {
+       "nimi": "Painotettu koskikorentonymfi",
+       "koko": "8–12",
+       "kuva": "kuvat/montana-stone.jpg",
+       "kuvaaja": "Mike Cline",
+       "lisenssi": "Public domain",
+       "lahde": "https://commons.wikimedia.org/wiki/File:BrooksMontanaStone.jpg",
+       "kuvassa": "Montana Stone"
+      }
+     ]
+    },
+    "aikuinen": {
+     "nimi": "Muniva naaras",
+     "syvyys": "Pinta",
+     "kuva": "aikuinen-koskikorento.svg",
+     "kuvaus": "Naaraat palaavat veden pinnalle munimaan.",
+     "perhot": [
+      {
+       "nimi": "Stimulator",
+       "koko": "10–14",
+       "kuva": "kuvat/stimulator.jpg",
+       "kuvaaja": "Mike Cline",
+       "lisenssi": "Public domain",
+       "lahde": "https://commons.wikimedia.org/wiki/File:OrangeStimulator.jpg"
+      }
+     ]
+    }
+   }
+  },
+  "surviaiset": {
+   "nimi": "Surviaiset",
+   "vaiheet": {
+    "pohjalla": {
+     "nimi": "Toukka",
+     "syvyys": "Pohja",
+     "kuva": "toukka.svg",
+     "kuvaus": "Toukka elää pohjan pehmeikössä.",
+     "perhot": [
+      {
+       "nimi": "Surviaisen toukka",
+       "koko": "14–18",
+       "kuva": "kuvat/bloodworm.jpg",
+       "kuvaaja": "Theessentialfly",
+       "lisenssi": "CC BY-SA 3.0",
+       "lahde": "https://commons.wikimedia.org/wiki/File:Bloodworm-trout-flies.jpg"
+      }
+     ]
+    },
+    "nousussa": {
+     "nimi": "Kotelo",
+     "syvyys": "Vesipatsas",
+     "kuva": "kotelo.svg",
+     "kuvaus": "Kotelo nousee hitaasti pintaan.",
+     "perhot": [
+      {
+       "nimi": "Buzzer",
+       "koko": "16–20",
+       "kuva": "kuvat/buzzer.jpg",
+       "kuvaaja": "Theessentialfly",
+       "lisenssi": "CC BY 3.0",
+       "lahde": "https://commons.wikimedia.org/wiki/File:Trout_Buzzers_Flies.jpg"
+      }
+     ]
+    },
+    "pinturi": {
+     "nimi": "Pinturi",
+     "syvyys": "Pintakalvo",
+     "kuva": "pinturi.svg",
+     "kuvaus": "Kotelo pintakalvossa, aikuinen kuoriutumassa.",
+     "perhot": [
+      {
+       "nimi": "CDC-surviaisemerger",
+       "koko": "16–20",
+       "kuva": "kuvat/para-midge.jpg",
+       "kuvaaja": "Curtis Fry",
+       "lisenssi": "CC BY 2.0",
+       "lahde": "https://commons.wikimedia.org/wiki/File:Biot_Para-Midge.jpg",
+       "kuvassa": "Biot Para-Midge"
+      }
+     ]
+    },
+    "aikuinen": {
+     "nimi": "Aikuinen",
+     "syvyys": "Pinta",
+     "kuva": "surviainen.svg",
+     "kuvaus": "Aikuiset surviaiset pinnalla.",
+     "perhot": [
+      {
+       "nimi": "Griffith's Gnat",
+       "koko": "18–22"
+      }
+     ]
+    }
+   }
+  }
+ },
+ "lajit": {
+  "harjus": {
+   "nimi": "Harjus",
+   "ryhmat": [
+    "paivankorennot",
+    "vesiperhoset",
+    "koskikorennot",
+    "surviaiset"
+   ],
+   "koot": "14–18",
+   "lisa": "Painotus pinturiin ja nousevaan vaiheeseen."
+  },
+  "taimen": {
+   "nimi": "Taimen",
+   "ryhmat": [
+    "vesiperhoset",
+    "koskikorennot",
+    "paivankorennot"
+   ],
+   "koot": "8–16",
+   "lisa": "Lisäksi streamerit; Lapissa hiiriperho hämärässä."
+  },
+  "siika": {
+   "nimi": "Siika",
+   "ryhmat": [
+    "surviaiset",
+    "paivankorennot"
+   ],
+   "koot": "16–20",
+   "lisa": "Pienet perhot, painotus koteloon ja pinturiin."
   },
   "lohi": {
-    "huom": "Lohi ei syö joessa, joten perho valitaan veden korkeuden, lämpötilan ja kirkkauden mukaan.",
-    "tilat": {
-      "korkea": { "nimi": "Kylmä ja korkea vesi", "tapa": "Uppoava siima", "kuva": "putkiperho.svg",
-        "perhot": [{ "nimi": "Willie Gunn", "koko": "Iso putkiperho" }, { "nimi": "Sunray Shadow", "koko": "Iso putkiperho" }] },
-      "laskeva": { "nimi": "Laskeva vesi", "tapa": "", "kuva": "putkiperho.svg",
-        "perhot": [{ "nimi": "Ally's Shrimp", "koko": "Keskikokoinen" }] },
-      "matala": { "nimi": "Matala ja lämmin vesi", "tapa": "Pienet perhot, hitch-tekniikka", "kuva": "putkiperho.svg",
-        "perhot": [{ "nimi": "Pieni putkiperho hitch-tekniikalla", "koko": "Pieni" }, { "nimi": "Bomber", "koko": "Pintaperho" }] }
-    }
-  },
-  "lamporaja_c": 20,
-  "lampoteksti": "Yli 20 °C:n vedessä vältä lohikalojen kalastusta: vapautettu kala ei välttämättä selviä."
+   "nimi": "Lohi",
+   "ryhmat": [],
+   "lohi": true
+  }
+ },
+ "lohi": {
+  "huom": "Lohi ei syö joessa, joten perho valitaan veden korkeuden, lämpötilan ja kirkkauden mukaan.",
+  "tilat": {
+   "korkea": {
+    "nimi": "Kylmä ja korkea vesi",
+    "tapa": "Uppoava siima",
+    "kuva": "putkiperho.svg",
+    "perhot": [
+     {
+      "nimi": "Willie Gunn",
+      "koko": "Iso putkiperho",
+      "kuva": "kuvat/putkiperho.jpg",
+      "kuvaaja": "kasperbs",
+      "lisenssi": "CC BY 2.0",
+      "lahde": "https://commons.wikimedia.org/wiki/File:Large_blue_tube_fly.jpg",
+      "kuvassa": "toinen putkiperho"
+     },
+     {
+      "nimi": "Sunray Shadow",
+      "koko": "Iso putkiperho"
+     }
+    ]
+   },
+   "laskeva": {
+    "nimi": "Laskeva vesi",
+    "tapa": "",
+    "kuva": "putkiperho.svg",
+    "perhot": [
+     {
+      "nimi": "Ally's Shrimp",
+      "koko": "Keskikokoinen",
+      "kuva": "kuvat/lohiperhoja.jpg",
+      "kuvaaja": "Ermell",
+      "lisenssi": "CC BY-SA 4.0",
+      "lahde": "https://commons.wikimedia.org/wiki/File:Lachsfliegen_mit_Federn-20071204-RM-113502.jpg",
+      "kuvassa": "lohiperhoja"
+     }
+    ]
+   },
+   "matala": {
+    "nimi": "Matala ja lämmin vesi",
+    "tapa": "Pienet perhot, hitch-tekniikka",
+    "kuva": "putkiperho.svg",
+    "perhot": [
+     {
+      "nimi": "Pieni putkiperho hitch-tekniikalla",
+      "koko": "Pieni"
+     },
+     {
+      "nimi": "Bomber",
+      "koko": "Pintaperho"
+     }
+    ]
+   }
+  }
+ },
+ "lamporaja_c": 20,
+ "lampoteksti": "Yli 20 °C:n vedessä vältä lohikalojen kalastusta: vapautettu kala ei välttämättä selviä."
 }

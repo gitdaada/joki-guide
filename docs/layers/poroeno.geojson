@@ -6,31 +6,31 @@
    "properties": {
     "nimi": "Poroeno – testialue",
     "tyyppi": "alue",
-    "kuvaus": "Likimääräinen testialue Porojärven itäpäästä kaakkoon, Käsivarren erämaa-alue. Uoma näkyy maastokartalla. Piirrä tarkka rajaus geojson.io:ssa."
+    "kuvaus": "Testialue Poroenon uoman ympärillä Porojärveltä Lätäsenoon, Käsivarren erämaa-alue. Uoma OpenStreetMapista näkyy, kun vesitilannetaso on päällä."
    },
    "geometry": {
     "type": "Polygon",
     "coordinates": [
      [
       [
-       21.48,
-       69.17
+       21.53,
+       69.165
       ],
       [
-       21.86,
-       69.17
+       22.1,
+       69.165
       ],
       [
-       21.86,
-       69.04
+       22.1,
+       68.97
       ],
       [
-       21.48,
-       69.04
+       21.53,
+       68.97
       ],
       [
-       21.48,
-       69.17
+       21.53,
+       69.165
       ]
      ]
     ]

@@ -1,13 +1,13 @@
 /* Joki guiden service worker: sovellus, tasot ja tallennetut kartat toimivat ilman verkkoa. */
 'use strict';
 
-var SHELL_CACHE = 'jg-shell-0.1.0';
+var SHELL_CACHE = 'jg-shell-0.2.0';
 var TILE_CACHE = 'jg-tiles-v1';
 var SHELL = [
   './', 'index.html', 'app.js', 'core.js', 'style.css', 'manifest.webmanifest',
   'vendor/leaflet/leaflet.js', 'vendor/leaflet/leaflet.css',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
-  'layers/index.json', 'layers/poroeno.geojson', 'data/perhot.json',
+  'layers/index.json', 'layers/poroeno.geojson', 'layers/hossa.geojson', 'data/perhot.json',
   'img/perhot/nymfi.svg', 'img/perhot/toukka.svg', 'img/perhot/kotelo.svg', 'img/perhot/pinturi.svg',
   'img/perhot/aikuinen-korento.svg', 'img/perhot/aikuinen-vesiperhonen.svg', 'img/perhot/aikuinen-koskikorento.svg',
   'img/perhot/surviainen.svg', 'img/perhot/putkiperho.svg'
@@ -54,6 +54,20 @@ function staleWhileRevalidate(event, request) {
   });
 }
 
+/** Päivittyvä data: ensin verkosta, ilman verkkoa viimeisin tallennettu. */
+function networkFirst(request) {
+  return caches.open(SHELL_CACHE).then(function (cache) {
+    return fetch(request, { cache: 'no-cache' }).then(function (r) {
+      if (r.ok) cache.put(request, r.clone());
+      return r;
+    }).catch(function () {
+      return cache.match(request, { ignoreSearch: true }).then(function (hit) {
+        return hit || new Response('{}', { status: 504, headers: { 'Content-Type': 'application/json' } });
+      });
+    });
+  });
+}
+
 self.addEventListener('fetch', function (e) {
   var req = e.request;
   if (req.method !== 'GET') return;
@@ -64,5 +78,6 @@ self.addEventListener('fetch', function (e) {
   }
   if (url.origin !== self.location.origin) return; // sää ja OSM suoraan verkosta, ei välimuistiin
   if (req.mode === 'navigate') { e.respondWith(staleWhileRevalidate(e, new Request('index.html'))); return; }
+  if (/\/data\/vesitilanne\.json$/.test(url.pathname)) { e.respondWith(networkFirst(req)); return; }
   e.respondWith(staleWhileRevalidate(e, req));
 });

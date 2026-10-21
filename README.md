@@ -2,7 +2,7 @@
 
 Offline-toimiva karttasovellus eränkäyntiin ja jokikalastukseen. Asennetaan puhelimeen selaimen kautta.
 
-Versio 0.1 on testiversio. Testialueena on Poroeno Käsivarren erämaa-alueella.
+Versio 0.2 on testiversio. Testialueina ovat Poroeno Käsivarren erämaa-alueella ja Hossanjoki Hossassa.
 
 ## Toiminnot
 
@@ -17,6 +17,7 @@ Versio 0.1 on testiversio. Testialueena on Poroeno Käsivarren erämaa-alueella.
 - Auringon nousu, lasku ja hämärä
 - Perhosuositus hyönteisen kehitysvaiheen mukaan: pohjalla, nousussa, pinturi tai aikuinen. Lohelle suositus veden tilan mukaan.
 - Sijainti koordinaatteina hätäpuhelua varten (WGS84 ja ETRS-TM35FIN)
+- Jokien vesitilanne väreinä (punainen = alhainen, vihreä = normaali, tummansininen = korkea), päälle ja pois *Tasot*-paneelista
 
 ## Käyttöönotto
 
@@ -33,6 +34,17 @@ Versio 0.1 on testiversio. Testialueena on Poroeno Käsivarren erämaa-alueella.
 
 Tiedoston voi myös tuoda suoraan puhelimessa: *Tasot* → *Tuo GeoJSON-tiedosto*. Tuotu taso tallentuu vain siihen laitteeseen. Tuonnissa säilytetään vain kentät `nimi`, `tyyppi` ja `kuvaus`.
 
+## Vesitilanne
+
+`pipeline/vesitilanne.py` ajetaan GitHub Actionsissa kerran päivässä (`.github/workflows/vesitilanne.yml`). Se kirjoittaa tiedoston `docs/data/vesitilanne.json`.
+
+- **Mitattu:** jos joella on Syken mittausasema enintään 2 km:n päässä uomasta, viimeisintä virtaamaa tai vedenkorkeutta verrataan saman vuodenajan (±7 vrk) arvoihin aiempina vuosina. Alle 25 %:n arvo on alhainen, yli 75 %:n korkea ja muut normaaleja.
+- **Arvio sateesta:** jos mittausasemaa ei ole, sama vertailu tehdään lähimmän sääaseman 14 vuorokauden sademäärälle. Arvio on karkeampi, ja se merkitään sovelluksessa erikseen.
+- Jokien uomat haetaan OpenStreetMapista kerran, ja ne tallentuvat tiedostoihin `docs/layers/<alue>-joet.geojson`.
+- Joet ja alueet määritellään tiedostossa `pipeline/joet.json`.
+
+Ajon voi käynnistää käsin: *Actions → Vesitilanne → Run workflow*. GitHub keskeyttää ajastetut ajot, jos repossa ei tapahdu mitään 60 päivään.
+
 ## Rakenne
 
 - `docs/`: sovellus, jonka GitHub Pages julkaisee
@@ -42,7 +54,8 @@ Tiedoston voi myös tuoda suoraan puhelimessa: *Tasot* → *Tuo GeoJSON-tiedosto
   - `layers/`: omat GeoJSON-tasot
   - `data/perhot.json`: perhosuositusten säännöt
   - `img/perhot/`: kehitysvaiheiden kuvitukset (korvataan omilla valokuvilla)
-- `tests/`: laskennan testit, ajetaan komennolla `node tests/core.test.js`
+- `pipeline/`: vesitilanteen päivitys GitHub Actionsissa (vain Pythonin standardikirjasto)
+- `tests/`: testit, ajetaan komennoilla `node tests/core.test.js` ja `python3 tests/test_pipeline.py`
 
 ## Tietosuoja ja tietoturva
 
@@ -57,8 +70,32 @@ Tiedoston voi myös tuoda suoraan puhelimessa: *Tasot* → *Tuo GeoJSON-tiedosto
 - Pohjakartta ja ilmakuva: Maanmittauslaitos, CC BY 4.0. Ilman avainta: © OpenStreetMapin tekijät, ODbL.
 - Sääennuste ja tuuli: Ilmatieteen laitos, avoin data, CC BY 4.0.
 - Sadetutkaennuste: MET Norway, Nowcast 2.0, CC BY 4.0.
-- Testialueen tuvat: Metsähallitus (luontoon.fi). Alueen rajaus on likimääräinen; uoma näkyy maastokartalla.
+- Vesitilanne: Suomen ympäristökeskus (Syke), Hydrologiarajapinta, CC BY 4.0; sademäärä: Ilmatieteen laitos, CC BY 4.0.
+- Jokien uomat: © OpenStreetMapin tekijät, ODbL.
+- Testialueiden tuvat: Metsähallitus (luontoon.fi). Alueiden rajaus on likimääräinen.
 - Perhosuositukset ovat lähtötaulukko yleisesti käytetyistä perhoista, eivät tutkimusdataa.
+- Perhojen valokuvat: Wikimedia Commons, ks. *Perhokuvat* alla.
+
+## Perhokuvat
+
+Valokuvat ovat Wikimedia Commonsista. Ne on pienennetty 480 pikselin levyisiksi, ja metatiedot on poistettu. Kuvien lisenssit ovat alkuperäisten tekijöiden, eikä tämän sovelluksen lisenssi koske niitä. Jos suositellusta perhosta ei löytynyt vapaasti lisensoitua kuvaa, sovelluksessa näytetään samantyyppisen perhon kuva ja kerrotaan, mikä perho kuvassa on, tai piirros.
+
+| Tiedosto | Alkuperäinen | Tekijä | Lisenssi |
+| --- | --- | --- | --- |
+| `bloodworm.jpg` | [Bloodworm-trout-flies.jpg](https://commons.wikimedia.org/wiki/File:Bloodworm-trout-flies.jpg) | Theessentialfly | CC BY-SA 3.0 |
+| `buzzer.jpg` | [Trout Buzzers Flies.jpg](https://commons.wikimedia.org/wiki/File:Trout_Buzzers_Flies.jpg) | Theessentialfly | CC BY 3.0 |
+| `cdc-olive.jpg` | [BWO CDC Winged Olive Biot.jpg](https://commons.wikimedia.org/wiki/File:BWO_CDC_Winged_Olive_Biot.jpg) | Mike Cline | CC BY-SA 4.0 |
+| `elk-hair-caddis.jpg` | [Elk Hair Caddis2.jpg](https://commons.wikimedia.org/wiki/File:Elk_Hair_Caddis2.jpg) | Mike Cline | CC BY-SA 4.0 |
+| `hares-ear.jpg` | [Gold ribbed hairs ear trout fly.JPG](https://commons.wikimedia.org/wiki/File:Gold_ribbed_hairs_ear_trout_fly.JPG) | Waldemarpaetz | CC BY-SA 4.0 |
+| `lohiperhoja.jpg` | [Lachsfliegen mit Federn-20071204-RM-113502.jpg](https://commons.wikimedia.org/wiki/File:Lachsfliegen_mit_Federn-20071204-RM-113502.jpg) | Ermell | CC BY-SA 4.0 |
+| `montana-stone.jpg` | [BrooksMontanaStone.jpg](https://commons.wikimedia.org/wiki/File:BrooksMontanaStone.jpg) | Mike Cline | Public domain |
+| `para-midge.jpg` | [Biot Para-Midge.jpg](https://commons.wikimedia.org/wiki/File:Biot_Para-Midge.jpg) | Curtis Fry | CC BY 2.0 |
+| `parachute-adams.jpg` | [Parachute Adams Dry Fly.jpg](https://commons.wikimedia.org/wiki/File:Parachute_Adams_Dry_Fly.jpg) | Freyfisher | CC BY-SA 2.0 |
+| `partridge-and-orange.jpg` | [PartridgeandOrange.jpg](https://commons.wikimedia.org/wiki/File:PartridgeandOrange.jpg) | Mike Cline | Public domain |
+| `pheasant-tail.jpg` | [American Pheasant Tail Nymph 02.jpg](https://commons.wikimedia.org/wiki/File:American_Pheasant_Tail_Nymph_02.jpg) | Mike Cline | CC BY-SA 4.0 |
+| `putkiperho.jpg` | [Large blue tube fly.jpg](https://commons.wikimedia.org/wiki/File:Large_blue_tube_fly.jpg) | kasperbs | CC BY 2.0 |
+| `red-spinner.jpg` | [Červená jepice modifikace Red Spinner IMG 1076.JPG](https://commons.wikimedia.org/wiki/File:%C4%8Cerven%C3%A1_jepice_modifikace_Red_Spinner_IMG_1076.JPG) | Jan Doné | CC BY 3.0 |
+| `stimulator.jpg` | [OrangeStimulator.jpg](https://commons.wikimedia.org/wiki/File:OrangeStimulator.jpg) | Mike Cline | Public domain |
 
 ## Lisenssi
 
@@ -73,4 +110,4 @@ Sovellus ja sen lähdekoodi ovat julkisesti nähtävillä, mutta niitä ei saa k
 - Kopioissa ja muokatuissa versioissa on säilytettävä LICENSE-tiedosto ja sen alussa oleva `Required Notice` -rivi.
 - Poikkeus: `docs/vendor/leaflet/` on Leaflet-kirjasto, jota koskee sen oma BSD 2-Clause -lisenssi ([docs/vendor/leaflet/LICENSE](docs/vendor/leaflet/LICENSE)).
 
-Sovelluksen data (`docs/layers/`, `docs/data/`) on johdettu avoimista aineistoista, joiden lisenssit on lueteltu kohdassa *Tietolähteet ja lisenssit*. Kuvitukset (`docs/img/`) ovat tekijän omia, eikä niitä saa käyttää kaupallisesti ilman lupaa.
+Sovelluksen data (`docs/layers/`, `docs/data/`) on johdettu avoimista aineistoista, joiden lisenssit on lueteltu kohdassa *Tietolähteet ja lisenssit*. Piirroskuvitukset (`docs/img/perhot/*.svg`) ja kuvakkeet ovat tekijän omia, eikä niitä saa käyttää kaupallisesti ilman lupaa. Valokuvia (`docs/img/perhot/kuvat/`) koskevat niiden omat lisenssit, jotka on lueteltu kohdassa *Perhokuvat*.

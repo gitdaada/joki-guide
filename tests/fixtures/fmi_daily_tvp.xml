@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Synteettinen testiaineisto FMI:n timevaluepair-muodossa (ei oikeita havaintoja). -->
+<wfs:FeatureCollection xmlns:wfs="http://www.opengis.net/wfs/2.0" xmlns:om="http://www.opengis.net/om/2.0"
+  xmlns:omso="http://inspire.ec.europa.eu/schemas/omso/3.0" xmlns:gml="http://www.opengis.net/gml/3.2"
+  xmlns:sams="http://www.opengis.net/samplingSpatial/2.0" xmlns:sam="http://www.opengis.net/sampling/2.0"
+  xmlns:target="http://xml.fmi.fi/namespace/om/atmosphericfeatures/1.1" xmlns:wml2="http://www.opengis.net/waterml/2.0">
+ <wfs:member>
+  <omso:PointTimeSeriesObservation gml:id="obs-1">
+   <om:featureOfInterest><sams:SF_SpatialSamplingFeature gml:id="sf-1">
+    <sam:sampledFeature><target:LocationCollection gml:id="lc-1"><target:member><target:Location gml:id="loc-1">
+     <gml:identifier codeSpace="http://xml.fmi.fi/namespace/stationcode/fmisid">999001</gml:identifier>
+     <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/name">Testiasema</gml:name>
+     <gml:name codeSpace="http://xml.fmi.fi/namespace/locationcode/geoid">-1</gml:name>
+    </target:Location></target:member></target:LocationCollection></sam:sampledFeature>
+    <sams:shape><gml:Point gml:id="p-1"><gml:pos>65.40 29.50 </gml:pos></gml:Point></sams:shape>
+   </sams:SF_SpatialSamplingFeature></om:featureOfInterest>
+   <om:result><wml2:MeasurementTimeseries gml:id="ts-1">
+    <wml2:point><wml2:MeasurementTVP><wml2:time>2026-10-07T00:00:00Z</wml2:time><wml2:value>2.5</wml2:value></wml2:MeasurementTVP></wml2:point>
+    <wml2:point><wml2:MeasurementTVP><wml2:time>2026-10-08T00:00:00Z</wml2:time><wml2:value>-1.0</wml2:value></wml2:MeasurementTVP></wml2:point>
+    <wml2:point><wml2:MeasurementTVP><wml2:time>2026-10-09T00:00:00Z</wml2:time><wml2:value>NaN</wml2:value></wml2:MeasurementTVP></wml2:point>
+    <wml2:point><wml2:MeasurementTVP><wml2:time>2026-10-10T00:00:00Z</wml2:time><wml2:value>4.0</wml2:value></wml2:MeasurementTVP></wml2:point>
+   </wml2:MeasurementTimeseries></om:result>
+  </omso:PointTimeSeriesObservation>
+ </wfs:member>
+</wfs:FeatureCollection>

@@ -112,3 +112,14 @@ table.wx th { color: var(--muted); font-weight: 600; font-size: 13px; }
 .dist-label::before { display: none; }
 .leaflet-popup-content { margin: 10px 12px; }
 .pop-t { font-weight: 700; }
+
+.credit { font-size: 11.5px; color: var(--muted); margin-top: 4px; }
+.credit a { color: var(--accent); }
+.card img { object-fit: cover; background: #eef3ee; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 4px 0; }
+.legend .li { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; }
+.legend .sw { width: 22px; height: 6px; border-radius: 3px; border: 1px solid #fff; display: inline-block; }
+.sw-alhainen { background: #e5484d; }
+.sw-normaali { background: #2fb35a; }
+.sw-korkea { background: #0b3d91; }
+.sw-tuntematon { background: #8a9aa0; }

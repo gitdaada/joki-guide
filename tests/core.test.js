@@ -76,7 +76,9 @@ test('Poroenon testitaso on kelvollinen ja alue löytyy', function () {
   var gj = JSON.parse(fs.readFileSync(path.join(__dirname, '../docs/layers/poroeno.geojson'), 'utf8'));
   var c = JG.cleanGeoJSON(gj);
   assert.strictEqual(c.features.length, 3);
-  assert.deepStrictEqual(JG.areaBbox(c), [21.48, 69.04, 21.86, 69.17]);
+  assert.deepStrictEqual(JG.areaBbox(c), [21.53, 68.97, 22.1, 69.165]);
+  var h = JG.cleanGeoJSON(JSON.parse(fs.readFileSync(path.join(__dirname, '../docs/layers/hossa.geojson'), 'utf8')));
+  assert.deepStrictEqual(JG.areaBbox(h), [29.3, 65.27, 29.62, 65.53]);
 });
 
 test('perhosuositus kehitysvaiheen mukaan', function () {
@@ -95,6 +97,21 @@ test('perhosuositus kehitysvaiheen mukaan', function () {
   // Siika: vain lajille kuuluvat ryhmät
   r = JG.recommend(d, 'siika', 'kaikki', { surface: false, signs: false });
   assert.deepStrictEqual(r.map(function (x) { return x.ryhma; }), ['Surviaiset', 'Päivänkorennot']);
+  // Valokuvilla on tekijä, lisenssi ja Commons-lähde, ja tiedosto on olemassa
+  var photos = 0;
+  function checkFly(p) {
+    if (!p.kuva) return;
+    assert.ok(fs.existsSync(path.join(__dirname, '../docs/img/perhot', p.kuva)), p.kuva);
+    if (/\.jpg$/.test(p.kuva)) {
+      photos++;
+      assert.ok(p.kuvaaja && p.lisenssi && /^https:\/\/commons\.wikimedia\.org\/wiki\/File:/.test(p.lahde), p.nimi);
+    }
+  }
+  Object.keys(d.ryhmat).forEach(function (g) {
+    Object.keys(d.ryhmat[g].vaiheet).forEach(function (v) { d.ryhmat[g].vaiheet[v].perhot.forEach(checkFly); });
+  });
+  Object.keys(d.lohi.tilat).forEach(function (t) { d.lohi.tilat[t].perhot.forEach(checkFly); });
+  assert.ok(photos >= 16, 'valokuvia ' + photos);
   // Kaikki kuvatiedostot ovat olemassa
   Object.keys(d.ryhmat).forEach(function (g) {
     Object.keys(d.ryhmat[g].vaiheet).forEach(function (v) {

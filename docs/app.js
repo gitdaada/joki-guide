@@ -3,7 +3,7 @@
   'use strict';
 
   var JG = window.JG;
-  var VERSION = '0.1.0';
+  var VERSION = '0.2.0';
   var MML_BASE = 'https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0';
   var MML_LAYERS = {
     maastokartta: { path: 'maastokartta', ext: 'png', estKB: 20, name: 'Maastokartta' },
@@ -31,7 +31,7 @@
     del: function (k) { try { localStorage.removeItem('jg.' + k); } catch (e) { /* estetty */ } }
   };
 
-  var settings = Object.assign({ apiKey: '', basemap: 'maastokartta', rings: false, offlineMaxZ: 15, hidden: {} },
+  var settings = Object.assign({ apiKey: '', basemap: 'maastokartta', rings: false, water: false, offlineMaxZ: 15, hidden: {} },
     store.get('settings', {}));
   settings.apiKey = JG.sanitizeKey(settings.apiKey);
   if (!MML_LAYERS[settings.basemap]) settings.basemap = 'maastokartta';
@@ -495,11 +495,20 @@
   function yesNo(label, key) {
     return h('div', { class: 'field' }, [h('span', { text: label }), seg([[true, 'Kyllä'], [false, 'Ei']], S.fly[key], function (v) { S.fly[key] = v; renderFlies(); })]);
   }
-  function flyCard(img, title, lines, badges) {
+  function flyCard(p, title, lines, badges) {
     var right = h('div', null, [h('div', { class: 't', text: title })]);
     (badges || []).forEach(function (b) { right.appendChild(h('span', { class: 'badge', text: b })); });
     lines.forEach(function (l) { if (l) right.appendChild(h('div', { class: 'small', text: l })); });
-    return h('div', { class: 'card' }, [h('img', { src: 'img/perhot/' + img, alt: '' }), right]);
+    if (p.kuvassa) right.appendChild(h('div', { class: 'credit', text: 'Kuvassa: ' + p.kuvassa }));
+    if (/\.svg$/.test(p.kuva || '')) right.appendChild(h('div', { class: 'credit', text: 'Piirros: vapaata kuvaa ei löytynyt.' }));
+    if (p.kuvaaja || p.lisenssi) {
+      var credit = h('div', { class: 'credit' }, ['Kuva: ' + (p.kuvaaja || 'tuntematon') + ', ' + (p.lisenssi || '') + ', pienennetty, ']);
+      if (p.lahde && /^https:\/\/commons\.wikimedia\.org\//.test(p.lahde)) {
+        credit.appendChild(h('a', { href: p.lahde, target: '_blank', rel: 'noopener noreferrer', text: 'lähde' }));
+      }
+      right.appendChild(credit);
+    }
+    return h('div', { class: 'card' }, [h('img', { src: 'img/perhot/' + p.kuva, alt: title, loading: 'lazy' }), right]);
   }
 
   function renderFlies() {
@@ -517,7 +526,7 @@
       body.appendChild(h('h3', { text: 'Veden tila' }));
       body.appendChild(seg(Object.keys(d.lohi.tilat).map(function (k) { return [k, d.lohi.tilat[k].nimi]; }), f.water, function (v) { f.water = v; renderFlies(); }));
       var t = d.lohi.tilat[f.water];
-      if (t) t.perhot.forEach(function (p) { body.appendChild(flyCard(t.kuva, p.nimi, [t.tapa], [p.koko])); });
+      if (t) t.perhot.forEach(function (p) { body.appendChild(flyCard({ kuva: p.kuva || t.kuva, kuvaaja: p.kuvaaja, lisenssi: p.lisenssi, lahde: p.lahde, kuvassa: p.kuvassa }, p.nimi, [t.tapa], [p.koko])); });
       body.appendChild(h('p', { class: 'muted small', text: d.huom }));
       return;
     }
@@ -541,10 +550,10 @@
     if (!recs.length) body.appendChild(h('p', { class: 'muted', text: 'Ei suositusta tälle yhdistelmälle.' }));
     recs.forEach(function (r) {
       r.perhot.forEach(function (p) {
-        body.appendChild(flyCard(p.kuva, p.nimi, [r.kuvaus, r.huom], [r.ryhma, r.vaihe, r.syvyys, 'koko ' + p.koko]));
+        body.appendChild(flyCard(p, p.nimi, [r.kuvaus, r.huom], [r.ryhma, r.vaihe, r.syvyys, 'koko ' + p.koko]));
       });
     });
-    body.appendChild(h('p', { class: 'muted small', text: d.huom + ' Kuvat ovat yleisiä vaihepiirroksia.' }));
+    body.appendChild(h('p', { class: 'muted small', text: d.huom }));
   }
 
   // --- Koordinaatit hätätilanteeseen ----------------------------------------------------
@@ -610,6 +619,12 @@
     body.appendChild(file);
     body.appendChild(h('div', { class: 'row' }, [h('button', { class: 'btn', type: 'button', text: 'Tuo GeoJSON-tiedosto', onclick: function () { file.click(); } })]));
     body.appendChild(h('p', { class: 'muted small', text: 'Piirrä taso geojson.io:ssa ja tallenna se GeoJSON-muodossa. Tuotu taso tallentuu vain tähän laitteeseen.' }));
+
+    body.appendChild(h('h3', { text: 'Vesitilanne' }));
+    var wc = h('input', { type: 'checkbox', checked: settings.water });
+    wc.addEventListener('change', function () { settings.water = wc.checked; saveSettings(); drawWater(); renderLayers(); });
+    body.appendChild(h('label', { class: 'check' }, [wc, h('span', { text: 'Näytä jokien vesitilanne väreinä' })]));
+    if (settings.water) body.appendChild(waterLegend());
 
     body.appendChild(h('h3', { text: 'Apuvälineet' }));
     var rc = h('input', { type: 'checkbox', checked: settings.rings });
@@ -764,7 +779,10 @@
       'Pohjakartta ja ilmakuva: Maanmittauslaitos, CC BY 4.0. Ilman avainta: © OpenStreetMapin tekijät (ODbL).',
       'Sääennuste ja tuuli: Ilmatieteen laitos, CC BY 4.0.',
       'Sadetutkaennuste: MET Norway, Nowcast 2.0, CC BY 4.0.',
-      'Testialue: tupien sijainnit Metsähallitukselta (luontoon.fi). Alueen rajaus on likimääräinen.'
+      'Vesitilanne: Suomen ympäristökeskus (Syke), Hydrologiarajapinta, CC BY 4.0, ja Ilmatieteen laitos, CC BY 4.0.',
+      'Jokien uomat: © OpenStreetMapin tekijät, ODbL.',
+      'Perhokuvat: Wikimedia Commons, tekijät ja lisenssit kuvien yhteydessä.',
+      'Testialueet: tupien sijainnit Metsähallitukselta (luontoon.fi). Alueiden rajaus on likimääräinen.'
     ].forEach(function (t) { body.appendChild(h('p', { class: 'small', text: t })); });
 
     body.appendChild(h('h3', { text: 'Lisenssi' }));
@@ -794,12 +812,122 @@
   $('btnMenu').addEventListener('click', openMenu);
   $('layerChip').addEventListener('click', function () { openSheet('layers', 'Kartta ja tasot'); renderLayers(); });
 
+  // --- Vesitilanne jokien päällä -----------------------------------------------------------
+  // Data tulee tiedostosta data/vesitilanne.json, jonka GitHub Actions päivittää päivittäin (pipeline/vesitilanne.py).
+
+  var WATER = {
+    alhainen: { color: '#e5484d', nimi: 'Alhainen' },
+    normaali: { color: '#2fb35a', nimi: 'Normaali' },
+    korkea: { color: '#0b3d91', nimi: 'Korkea' },
+    tuntematon: { color: '#8a9aa0', nimi: 'Ei tietoa' }
+  };
+  var waterLayer = L.layerGroup();
+  S.water = null;
+
+  function fmtNum(v, unit) {
+    if (v === null || v === undefined || !isFinite(v)) return '–';
+    var d = Math.abs(v) >= 100 ? 0 : (Math.abs(v) >= 10 ? 1 : 2);
+    return v.toFixed(d).replace('.', ',') + (unit ? ' ' + unit : '');
+  }
+  function fmtDate(iso) {
+    var t = Date.parse(iso);
+    if (!isFinite(t)) return '';
+    var d = new Date(t);
+    return d.getDate() + '.' + (d.getMonth() + 1) + '.' + d.getFullYear();
+  }
+
+  function waterLegend() {
+    var box = h('div', { class: 'legend' });
+    ['alhainen', 'normaali', 'korkea', 'tuntematon'].forEach(function (k) {
+      var sw = h('span', { class: 'sw sw-' + k });
+      box.appendChild(h('span', { class: 'li' }, [sw, WATER[k].nimi]));
+    });
+    var p = h('p', { class: 'muted small' });
+    if (S.water) {
+      p.textContent = 'Luokka verrataan saman vuodenajan tavalliseen vaihteluun (25–75 % aiempina vuosina). ' +
+        'Päivitetty ' + fmtDate(S.water.paivitetty) + '. Napauta jokea nähdäksesi arvot.';
+    } else p.textContent = 'Vesitilannetta ei ole vielä ladattu.';
+    return h('div', null, [box, p]);
+  }
+
+  function waterPopup(j) {
+    var c = WATER[j.luokka] || WATER.tuntematon;
+    var box = h('div', null, [h('div', { class: 'pop-t', text: j.nimi }), h('div', { text: 'Vesitilanne: ' + c.nimi })]);
+    var m = j.mittaus;
+    if (m) {
+      box.appendChild(h('p', { class: 'small', text: (m.suure === 'virtaama' ? 'Virtaama ' : 'Vedenkorkeus ') + fmtNum(m.arvo, m.yksikko) +
+        ' (' + fmtDate(m.aika) + '), asema ' + m.asema + '.' }));
+      if (m.p25 !== null && m.p25 !== undefined) box.appendChild(h('p', { class: 'small muted', text: 'Tavallisesti tähän aikaan ' +
+        fmtNum(m.p25, m.yksikko) + '–' + fmtNum(m.p75, m.yksikko) + ' (' + m.vuodet + ' vuotta).' }));
+    }
+    var r = j.sade14;
+    if (r) {
+      box.appendChild(h('p', { class: 'small', text: 'Sade 14 vrk: ' + fmtNum(r.mm, 'mm') + ', sääasema ' + r.asema + (r.etaisyys_km ? ' (' + Math.round(r.etaisyys_km) + ' km)' : '') + '.' }));
+      if (r.p25 !== null && r.p25 !== undefined) box.appendChild(h('p', { class: 'small muted', text: 'Tavallisesti samaan aikaan ' +
+        fmtNum(r.p25, 'mm') + '–' + fmtNum(r.p75, 'mm') + ' (' + r.vuodet + ' vuotta).' }));
+    }
+    box.appendChild(h('p', { class: 'small muted', text: j.menetelma === 'mittaus' ? 'Luokka mitatusta arvosta (Syke).' :
+      (j.menetelma === 'sade' ? 'Luokka on arvio sademäärästä (Ilmatieteen laitos), ei mitattu vedenkorkeus.' : 'Luokkaa ei voitu laskea.') }));
+    return box;
+  }
+
+  function drawWater() {
+    waterLayer.clearLayers();
+    if (!settings.water) { map.removeLayer(waterLayer); return; }
+    waterLayer.addTo(map);
+    if (!S.water) { loadWater(); return; }
+    var byId = {};
+    (S.water.joet || []).forEach(function (j) { byId[j.id] = j; });
+    (S.water.geo || []).forEach(function (gj) {
+      gj.features.forEach(function (f) {
+        var j = byId[(f.properties || {}).joki_id];
+        if (!j || !f.geometry || !/LineString/.test(f.geometry.type)) return;
+        var c = (WATER[j.luokka] || WATER.tuntematon).color;
+        L.geoJSON(f, { style: { color: '#ffffff', weight: 9, opacity: 0.85, lineCap: 'round' }, interactive: false }).addTo(waterLayer);
+        L.geoJSON(f, { style: { color: c, weight: 5, opacity: 1, lineCap: 'round', dashArray: j.luokka ? null : '6 6' } })
+          .bindPopup(function () { return waterPopup(j); }).addTo(waterLayer);
+      });
+    });
+  }
+
+  function loadWater() {
+    return fetch('data/vesitilanne.json', { credentials: 'omit', cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (j) {
+      var files = (j.geometriat || []).filter(function (f) { return /^layers\/[a-z0-9_-]+\.geojson$/i.test(f); });
+      return Promise.all(files.map(function (f) {
+        return fetch(f, { credentials: 'omit' }).then(function (r) { return r.json(); }).then(JG.cleanGeoJSON).catch(function () { return null; });
+      })).then(function (geo) {
+        j.geo = geo.filter(Boolean);
+        S.water = j;
+        drawWater();
+        if (S.sheet === 'layers') renderLayers();
+      });
+    }).catch(function () { toast('Vesitilannetta ei voitu ladata.'); });
+  }
+
+  // Kun verkko on käytössä, sovelluksen data ja kuvat haetaan valmiiksi välimuistiin offline-käyttöä varten.
+  function prefetchForOffline() {
+    if (!navigator.onLine || !('serviceWorker' in navigator)) return;
+    loadFlies().then(function (d) {
+      var urls = {};
+      Object.keys(d.ryhmat).forEach(function (g) {
+        Object.keys(d.ryhmat[g].vaiheet).forEach(function (v) {
+          (d.ryhmat[g].vaiheet[v].perhot || []).forEach(function (p) { if (p.kuva) urls['img/perhot/' + p.kuva] = 1; });
+        });
+      });
+      Object.keys(d.lohi.tilat).forEach(function (k) { d.lohi.tilat[k].perhot.forEach(function (p) { if (p.kuva) urls['img/perhot/' + p.kuva] = 1; }); });
+      Object.keys(urls).forEach(function (u) { fetch(u, { credentials: 'omit' }).catch(function () {}); });
+    }).catch(function () {});
+    fetch('data/vesitilanne.json', { credentials: 'omit' }).catch(function () {});
+  }
+
   // --- Käynnistys --------------------------------------------------------------------------
 
   if (S.wx) drawWind();
   loadLayers().then(function () {
     if (!store.get('view', null)) fitLayer('poroeno');
   });
+  if (settings.water) drawWater();
+  setTimeout(prefetchForOffline, 4000);
   if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
     navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function () { /* offline-tila ei käytössä */ });
   }

@@ -1,0 +1,40 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "nimi": "Hossa – testialue",
+    "tyyppi": "alue",
+    "kuvaus": "Testialue Hossanjoen ja Somerjoen ympärillä, Hossan kansallispuisto, Suomussalmi. Hossanjoki laskee Kiantajärveen. Metsähallituksen lupa-alue 5502."
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       29.3,
+       65.53
+      ],
+      [
+       29.62,
+       65.53
+      ],
+      [
+       29.62,
+       65.27
+      ],
+      [
+       29.3,
+       65.27
+      ],
+      [
+       29.3,
+       65.53
+      ]
+     ]
+    ]
+   }
+  }
+ ]
+}
