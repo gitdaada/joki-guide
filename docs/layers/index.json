@@ -1,0 +1,9 @@
+{
+ "tasot": [
+  {
+   "id": "poroeno",
+   "nimi": "Poroeno (testialue)",
+   "tiedosto": "poroeno.geojson"
+  }
+ ]
+}

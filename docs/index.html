@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="fi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob: https://avoin-karttakuva.maanmittauslaitos.fi https://tile.openstreetmap.org; connect-src 'self' https://avoin-karttakuva.maanmittauslaitos.fi https://opendata.fmi.fi https://api.met.no; worker-src 'self'; manifest-src 'self'; font-src 'self'; media-src 'none'; object-src 'none'; frame-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <title>Joki guide</title>
+  <meta name="description" content="Offline-kartta eränkäyntiin ja jokikalastukseen">
+  <meta name="theme-color" content="#0e1a1f">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Joki guide">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="map" aria-label="Kartta"></div>
+
+  <header class="topbar">
+    <div class="brand">Joki guide</div>
+    <button id="layerChip" class="chip" type="button">Tasot</button>
+  </header>
+
+  <div id="compass" class="compass hidden" aria-live="polite">
+    <svg class="rose" viewBox="0 0 100 100" aria-hidden="true">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="2" opacity="0.5"/>
+      <g id="roseDial">
+        <path d="M50 8 L56 50 L50 46 L44 50 Z" fill="#e5484d"/>
+        <path d="M50 92 L56 50 L50 54 L44 50 Z" fill="#cfd8dc"/>
+        <text x="50" y="22" text-anchor="middle" font-size="11" fill="currentColor" font-weight="700">P</text>
+      </g>
+      <g id="targetArrow" class="hidden">
+        <path d="M50 4 L55 16 L45 16 Z" fill="#ffd166"/>
+      </g>
+    </svg>
+    <div class="compass-text">
+      <div id="headingText" class="big">–</div>
+      <div id="targetText" class="small"></div>
+    </div>
+  </div>
+
+  <div id="measureBar" class="measure-bar hidden">
+    <div id="measureText">Napauta karttaa lisätäksesi pisteitä.</div>
+    <div class="row">
+      <button id="measureUndo" type="button" class="btn">Peru</button>
+      <button id="measureClear" type="button" class="btn">Tyhjennä</button>
+      <button id="measureDone" type="button" class="btn primary">Valmis</button>
+    </div>
+  </div>
+
+  <nav class="fabs" aria-label="Toiminnot">
+    <button id="btnLocate" class="fab" type="button" aria-label="Oma sijainti" title="Oma sijainti">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4" fill="currentColor"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="12" r="7.5" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+    </button>
+    <button id="btnCompass" class="fab" type="button" aria-label="Kompassi" title="Kompassi">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 5l3 7h-6z" fill="#e5484d"/><path d="M12 19l3-7H9z" fill="currentColor"/></svg>
+    </button>
+    <button id="btnMeasure" class="fab" type="button" aria-label="Mittaa etäisyys" title="Mittaa etäisyys">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 18L18 4" stroke="currentColor" stroke-width="2"/><circle cx="4.5" cy="18" r="2.5" fill="currentColor"/><circle cx="18" cy="5" r="2.5" fill="currentColor"/><path d="M8 14l2 2M11 11l2 2M14 8l2 2" stroke="currentColor" stroke-width="1.6"/></svg>
+    </button>
+    <button id="btnWeather" class="fab" type="button" aria-label="Sää ja tuuli" title="Sää ja tuuli">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17h10a4 4 0 0 0 0-8 5.5 5.5 0 0 0-10.6 1.6A3.3 3.3 0 0 0 7 17z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 20l-1 2M13 20l-1 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <button id="btnFlies" class="fab" type="button" aria-label="Perhosuositus" title="Perhosuositus">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14c4-1 9-1 14 0" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/><path d="M12 13l-3-8 5 7z" fill="currentColor"/><path d="M13 13l4-7-1 8z" fill="currentColor" opacity="0.7"/><path d="M18 14c2 0 2 4 0 4s-2-2 0-2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+    </button>
+    <button id="btnSos" class="fab" type="button" aria-label="Sijaintini koordinaatteina" title="Sijaintini koordinaatteina">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v4M12 13.5v.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+    </button>
+    <button id="btnMenu" class="fab" type="button" aria-label="Asetukset ja tiedot" title="Asetukset ja tiedot">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+  </nav>
+
+  <section id="sheet" class="sheet hidden" role="dialog" aria-modal="false" aria-labelledby="sheetTitle">
+    <div class="sheet-head">
+      <h2 id="sheetTitle">–</h2>
+      <button id="sheetClose" class="icon-btn" type="button" aria-label="Sulje">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div id="sheetBody" class="sheet-body"></div>
+  </section>
+
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="core.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
