@@ -123,3 +123,13 @@ table.wx th { color: var(--muted); font-weight: 600; font-size: 13px; }
 .sw-normaali { background: #2fb35a; }
 .sw-korkea { background: #0b3d91; }
 .sw-tuntematon { background: #8a9aa0; }
+
+/* Solmuanimaatiot */
+.knot-svg { display: block; width: 100%; height: auto; margin-top: 8px; background: #0b1519; border: 1px solid var(--line); border-radius: 12px; }
+.knot-cap { min-height: 3em; margin: 8px 0; font-weight: 600; }
+.knot-ctrl .btn { flex: 1; }
+.knot-steps { margin: 12px 0 0; padding-left: 22px; }
+.knot-steps li { padding: 5px 0; color: var(--muted); cursor: pointer; }
+.knot-steps li.on { color: var(--text); font-weight: 600; }
+.knot-tips { margin: 0; padding-left: 18px; }
+.knot-tips li { margin: 4px 0; }

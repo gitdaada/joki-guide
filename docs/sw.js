@@ -1,10 +1,10 @@
 /* Joki guiden service worker: sovellus, tasot ja tallennetut kartat toimivat ilman verkkoa. */
 'use strict';
 
-var SHELL_CACHE = 'jg-shell-0.2.6';
+var SHELL_CACHE = 'jg-shell-0.2.7';
 var TILE_CACHE = 'jg-tiles-v1';
 var SHELL = [
-  './', 'app.js', 'core.js', 'style.css', 'manifest.webmanifest',
+  './', 'app.js', 'core.js', 'solmut.js', 'style.css', 'manifest.webmanifest',
   'vendor/leaflet/leaflet.js', 'vendor/leaflet/leaflet.css',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
   'layers/index.json', 'data/perhot.json', // tasotiedostot tallentuvat välimuistiin, kun sovellus lataa ne

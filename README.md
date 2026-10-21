@@ -18,6 +18,7 @@ Versio 0.2 on testiversio. Testialueina ovat Poroeno Käsivarren erämaa-alueell
 - Sadetutkaennuste 0–2 h
 - Auringon nousu, lasku ja hämärä
 - Perhosuositus hyönteisen kehitysvaiheen mukaan: pohjalla, nousussa, pinturi tai aikuinen. Lohelle suositus veden tilan mukaan.
+- Animoidut solmuohjeet vaihe vaiheelta: verisolmu (perukkeen ja tippetin liitos) ja parannettu clinch-solmu (tippetin ja perhon liitos). Toimivat ilman verkkoa.
 - Sijainti koordinaatteina hätäpuhelua varten (WGS84 ja ETRS-TM35FIN)
 - Jokien vesitilanne väreinä (punainen = alhainen, vihreä = normaali, tummansininen = korkea), päälle ja pois *Tasot*-paneelista
 
@@ -54,10 +55,11 @@ Ajon voi käynnistää käsin: *Actions → Vesitilanne → Run workflow*. GitHu
 - `docs/`: sovellus, jonka Cloudflare Pages julkaisee (`docs/_headers` = HTTP-turvaotsakkeet)
   - `core.js`: laskenta ilman käyttöliittymää (etäisyys, koordinaatit, aurinko, sää, perhosuositus)
   - `app.js`: käyttöliittymä
+  - `solmut.js`: solmuanimaatiot (SVG, piirretään koodista)
   - `sw.js`: service worker, joka pitää sovelluksen ja tallennetut kartat käytettävissä ilman verkkoa
   - `layers/`: omat GeoJSON-tasot
   - `data/perhot.json`: perhosuositusten säännöt
-  - `img/perhot/`: kehitysvaiheiden kuvitukset (korvataan omilla valokuvilla)
+  - `img/perhot/`: perhojen valokuvat ja piirrokset
 - `pipeline/`: vesitilanteen päivitys GitHub Actionsissa (vain Pythonin standardikirjasto)
 - `tests/`: testit, ajetaan komennoilla `node tests/core.test.js` ja `python3 tests/test_pipeline.py`
 
@@ -79,6 +81,7 @@ Ajon voi käynnistää käsin: *Actions → Vesitilanne → Run workflow*. GitHu
 - Testialueiden tuvat: Metsähallitus (luontoon.fi). Alueiden rajaus on likimääräinen.
 - Perhosuositukset ovat lähtötaulukko yleisesti käytetyistä perhoista, eivät tutkimusdataa.
 - Perhojen valokuvat: Wikimedia Commons, ks. *Perhokuvat* alla.
+- Solmujen vaiheet ja kierrosmäärät: [Orvis](https://howtoflyfish.orvis.com/fly-fishing-knots/blood-knot-animation), [Animated Knots](https://www.animatedknots.com/improved-clinch-knot) ja [Bass Pro](https://1source.basspro.com/news-tips/fishing-knots-how-tie/7686/how-tie-improved-clinch-knot). Animaatiot ovat tämän sovelluksen omia piirroksia (`docs/solmut.js`).
 
 ## Perhokuvat
 

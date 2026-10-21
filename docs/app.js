@@ -3,7 +3,7 @@
   'use strict';
 
   var JG = window.JG;
-  var VERSION = '0.2.6';
+  var VERSION = '0.2.7';
   var MML_BASE = 'https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0';
   var MML_LAYERS = {
     maastokartta: { path: 'maastokartta', ext: 'png', estKB: 20, name: 'Maastokartta' },
@@ -39,7 +39,7 @@
 
   var S = { pos: null, watchId: null, follow: false, heading: null, compassOn: false, measuring: false,
             pts: [], layers: {}, wx: store.get('wx', null), wxLoading: false, dl: null, flies: null,
-            fly: { species: 'harjus', group: 'kaikki', surface: null, flying: null, signs: null, water: null } };
+            knot: null, fly: { tab: 'perhot', species: 'harjus', group: 'kaikki', surface: null, flying: null, signs: null, water: null } };
 
   // --- DOM-apurit: teksti asetetaan aina textContentina, ei HTML:nä -----------------------
 
@@ -512,10 +512,30 @@
     return h('div', { class: 'card' }, [h('img', { src: 'img/perhot/' + p.kuva, alt: title, loading: 'lazy' }), right]);
   }
 
+  // --- Solmut: animaatiot tiedostosta solmut.js ---------------------------------------------
+
+  function renderKnots(body) {
+    var list = window.JGKnots ? window.JGKnots.list : [];
+    if (!list.length) { body.appendChild(h('p', { class: 'muted', text: 'Solmuanimaatioita ei voitu ladata.' })); return; }
+    if (!S.knot) S.knot = list[0].id;
+    body.appendChild(h('h3', { text: 'Solmu' }));
+    body.appendChild(seg(list.map(function (k) { return [k.id, k.nimi]; }), S.knot, function (v) { S.knot = v; renderFlies(); }));
+    var k = list.filter(function (x) { return x.id === S.knot; })[0];
+    body.appendChild(h('p', { class: 'muted small', text: k.kaytto + ' (' + k.en + ').' }));
+    body.appendChild(window.JGKnots.player(k.id));
+    body.appendChild(h('h3', { text: 'Vinkit' }));
+    var ul = h('ul', { class: 'small knot-tips' });
+    k.tiedot.forEach(function (t) { ul.appendChild(h('li', { text: t })); });
+    body.appendChild(ul);
+    body.appendChild(h('p', { class: 'muted small', text: 'Vaiheet: Orvis, Animated Knots ja Bass Pro. Animaatiot ovat Joki guiden omia piirroksia.' }));
+  }
+
   function renderFlies() {
     if (S.sheet !== 'flies') return;
     var body = $('sheetBody'), d = S.flies, f = S.fly;
     body.textContent = '';
+    body.appendChild(seg([['perhot', 'Perhot'], ['solmut', 'Solmut']], f.tab, function (v) { f.tab = v; renderFlies(); }));
+    if (f.tab === 'solmut') { renderKnots(body); return; }
     if (!d) { body.appendChild(h('p', { class: 'muted', text: 'Ladataan…' })); return; }
     body.appendChild(h('p', { class: 'warn small', text: d.lampoteksti }));
     body.appendChild(h('h3', { text: 'Kalalaji' }));
@@ -828,7 +848,10 @@
   $('measureClear').addEventListener('click', function () { S.pts = []; drawMeasure(); });
   $('measureDone').addEventListener('click', function () { setMeasuring(false); });
   $('btnWeather').addEventListener('click', function () { openSheet('weather', 'Sää ja tuuli'); renderWeather(); refreshWeather(false); });
-  $('btnFlies').addEventListener('click', function () { openSheet('flies', 'Perhosuositus'); renderFlies(); loadFlies().then(renderFlies, function () { toast('Perhotietoja ei voitu ladata.'); }); });
+  $('btnFlies').addEventListener('click', function () {
+    openSheet('flies', 'Perhot ja solmut'); renderFlies();
+    loadFlies().then(function () { if (S.fly.tab === 'perhot') renderFlies(); }, function () { toast('Perhotietoja ei voitu ladata.'); });
+  });
   $('btnSos').addEventListener('click', function () { openSheet('sos', 'Sijaintini koordinaatteina'); renderSos(); if (!S.pos) startLocate(); });
   $('btnMenu').addEventListener('click', openMenu);
   $('layerChip').addEventListener('click', function () { openSheet('layers', 'Kartta ja tasot'); renderLayers(); });
