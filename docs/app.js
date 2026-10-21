@@ -3,7 +3,7 @@
   'use strict';
 
   var JG = window.JG;
-  var VERSION = '0.2.1';
+  var VERSION = '0.2.2';
   var MML_BASE = 'https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0';
   var MML_LAYERS = {
     maastokartta: { path: 'maastokartta', ext: 'png', estKB: 20, name: 'Maastokartta' },
@@ -788,6 +788,26 @@
     body.appendChild(h('h3', { text: 'Lisenssi' }));
     body.appendChild(h('p', { class: 'small', text: 'Joki guide © 2026 gitdaada. PolyForm Noncommercial 1.0.0: käyttö ja muokkaus sallittu ei-kaupallisiin tarkoituksiin. Kaupallinen käyttö vaatii tekijän kirjallisen luvan. Leaflet: BSD 2-Clause.' }));
     body.appendChild(h('p', { class: 'muted small', text: 'Versio ' + VERSION }));
+    body.appendChild(h('div', { class: 'row' }, [h('button', { class: 'btn', type: 'button', text: 'Päivitä sovellus', onclick: checkForUpdate })]));
+  }
+
+  // --- Päivitys ---------------------------------------------------------------------------
+
+  function showUpdateBanner() {
+    var t = $('toast');
+    clearTimeout(toastTimer);
+    t.textContent = '';
+    t.appendChild(h('span', { text: 'Uusi versio on ladattu. ' }));
+    t.appendChild(h('button', { class: 'btn primary', type: 'button', text: 'Ota käyttöön', onclick: function () { location.reload(); } }));
+    t.classList.remove('hidden');
+  }
+
+  function checkForUpdate() {
+    if (!S.swReg) { location.reload(); return; }
+    toast('Tarkistetaan päivityksiä…');
+    S.swReg.update().then(function () {
+      setTimeout(function () { location.reload(); }, 800);
+    }, function () { toast('Päivitystä ei voitu tarkistaa. Tarkista verkkoyhteys.'); });
   }
 
   // --- Paneeli ----------------------------------------------------------------------------
@@ -928,8 +948,20 @@
   });
   if (settings.water) drawWater();
   setTimeout(prefetchForOffline, 4000);
+  // Päivitykset: uusi versio otetaan käyttöön, ja käyttäjälle tarjotaan uudelleenlatausta.
+  // Asennetussa sovelluksessa ei ole selaimen päivityspainiketta, ja kartta vie vetoeleen.
   if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
-    navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function () { /* offline-tila ei käytössä */ });
+    var hadController = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.register('sw.js', { scope: './' }).then(function (reg) {
+      S.swReg = reg;
+      document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState === 'visible' && navigator.onLine) reg.update().catch(function () {});
+      });
+    }).catch(function () { /* offline-tila ei käytössä */ });
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (!hadController) { hadController = true; return; }
+      showUpdateBanner();
+    });
   }
   if (!settings.apiKey) setTimeout(function () { toast('Lisää MML:n API-avain asetuksista, niin saat maastokartan ja offline-tallennuksen.', 6000); }, 1200);
 })();
