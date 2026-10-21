@@ -1,0 +1,756 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx">
+  <edmx:DataServices m:DataServiceVersion="3.0" m:MaxDataServiceVersion="3.0" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata">
+    <Schema Namespace="Hydrologiarajapinta.Models" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <EntityType Name="Haihdunta">
+        <Key>
+          <PropertyRef Name="Paikka_Id" />
+          <PropertyRef Name="Aika" />
+        </Key>
+        <Property Name="Paikka_Id" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Aika" Type="Edm.DateTime" Nullable="false" />
+        <Property Name="Arvo" Type="Edm.Decimal" Nullable="false" />
+        <Property Name="Lippu_id" Type="Edm.Int16" />
+        <NavigationProperty Name="Lippu" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Haihdunta_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartner" ToRole="Lippu" FromRole="LippuPartner" />
+        <NavigationProperty Name="Paikka" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Haihdunta_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner" ToRole="Paikka" FromRole="PaikkaPartner" />
+      </EntityType>
+      <EntityType Name="Lippu">
+        <Key>
+          <PropertyRef Name="Lippu_id" />
+        </Key>
+        <Property Name="Lippu_id" Type="Edm.Int16" Nullable="false" />
+        <Property Name="LippuKoodi" Type="Edm.String" Nullable="false" />
+        <Property Name="Kuvaus" Type="Edm.String" Nullable="false" />
+        <Property Name="KuvausEng" Type="Edm.String" />
+        <NavigationProperty Name="Haihdunta" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Lippu_Haihdunta_Hydrologiarajapinta_Models_Haihdunta_HaihduntaPartner" ToRole="Haihdunta" FromRole="HaihduntaPartner" />
+        <NavigationProperty Name="Jaanpaksuus" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Lippu_Jaanpaksuus_Hydrologiarajapinta_Models_Jaanpaksuus_JaanpaksuusPartner" ToRole="Jaanpaksuus" FromRole="JaanpaksuusPartner" />
+        <NavigationProperty Name="JaatJaanlahto" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Lippu_JaatJaanlahto_Hydrologiarajapinta_Models_JaatJaanlahto_JaatJaanlahtoPartner" ToRole="JaatJaanlahto" FromRole="JaatJaanlahtoPartner" />
+        <NavigationProperty Name="LumiPiste" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Lippu_LumiPiste_Hydrologiarajapinta_Models_LumiPiste_LumiPistePartner" ToRole="LumiPiste" FromRole="LumiPistePartner" />
+        <NavigationProperty Name="Valuma" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Lippu_Valuma_Hydrologiarajapinta_Models_Valuma_ValumaPartner" ToRole="Valuma" FromRole="ValumaPartner" />
+        <NavigationProperty Name="Vedenkorkeus" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Lippu_Vedenkorkeus_Hydrologiarajapinta_Models_Vedenkorkeus_VedenkorkeusPartner" ToRole="Vedenkorkeus" FromRole="VedenkorkeusPartner" />
+        <NavigationProperty Name="Virtaama" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Lippu_Virtaama_Hydrologiarajapinta_Models_Virtaama_VirtaamaPartner" ToRole="Virtaama" FromRole="VirtaamaPartner" />
+      </EntityType>
+      <EntityType Name="Paikka">
+        <Key>
+          <PropertyRef Name="Paikka_Id" />
+        </Key>
+        <Property Name="Paikka_Id" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Suure_Id" Type="Edm.Int16" Nullable="false" />
+        <Property Name="H_Kunta_Id" Type="Edm.Int16" Nullable="false" />
+        <Property Name="KuntaNimi" Type="Edm.String" />
+        <Property Name="Nro" Type="Edm.String" />
+        <Property Name="Nimi" Type="Edm.String" />
+        <Property Name="KoordYkPohj" Type="Edm.Int32" Nullable="false" />
+        <Property Name="KoordYkIta" Type="Edm.Int32" Nullable="false" />
+        <Property Name="KoordPkPohj" Type="Edm.Int32" />
+        <Property Name="KoordPkIta" Type="Edm.Int32" />
+        <Property Name="KoordLat" Type="Edm.String" />
+        <Property Name="KoordLong" Type="Edm.String" />
+        <Property Name="KoordTarkkuus" Type="Edm.Int16" Nullable="false" />
+        <Property Name="Karttalehti" Type="Edm.String" />
+        <Property Name="Omistaja_Id" Type="Edm.Int16" Nullable="false" />
+        <Property Name="Tila_Id" Type="Edm.Int16" Nullable="false" />
+        <Property Name="Laitteisto_Id" Type="Edm.Int16" />
+        <Property Name="H_Vesal_Id" Type="Edm.Int32" Nullable="false" />
+        <Property Name="VesalNimi" Type="Edm.String" />
+        <Property Name="H_PaaVesal_Id" Type="Edm.Int32" Nullable="false" />
+        <Property Name="PaaVesalNimi" Type="Edm.String" />
+        <Property Name="KoordErTmPohj" Type="Edm.Int32" />
+        <Property Name="KoordErTmIta" Type="Edm.Int32" />
+        <Property Name="Jarvi_Id" Type="Edm.Int32" />
+        <Property Name="JarviNro" Type="Edm.String" />
+        <Property Name="JarviNimi" Type="Edm.String" />
+        <NavigationProperty Name="Vedenkorkeus" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_Vedenkorkeus_Hydrologiarajapinta_Models_Vedenkorkeus_VedenkorkeusPartner" ToRole="Vedenkorkeus" FromRole="VedenkorkeusPartner" />
+        <NavigationProperty Name="Virtaama" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_Virtaama_Hydrologiarajapinta_Models_Virtaama_VirtaamaPartner" ToRole="Virtaama" FromRole="VirtaamaPartner" />
+        <NavigationProperty Name="LampoPintavesi" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_LampoPintavesi_Hydrologiarajapinta_Models_LampoPintavesi_LampoPintavesiPartner" ToRole="LampoPintavesi" FromRole="LampoPintavesiPartner" />
+        <NavigationProperty Name="LampoLuotaus" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_LampoLuotaus_Hydrologiarajapinta_Models_LampoLuotaus_LampoLuotausPartner" ToRole="LampoLuotaus" FromRole="LampoLuotausPartner" />
+        <NavigationProperty Name="LumiAlue" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_LumiAlue_Hydrologiarajapinta_Models_LumiAlue_LumiAluePartner" ToRole="LumiAlue" FromRole="LumiAluePartner" />
+        <NavigationProperty Name="LumiPiste" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_LumiPiste_Hydrologiarajapinta_Models_LumiPiste_LumiPistePartner" ToRole="LumiPiste" FromRole="LumiPistePartner" />
+        <NavigationProperty Name="Haihdunta" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_Haihdunta_Hydrologiarajapinta_Models_Haihdunta_HaihduntaPartner" ToRole="Haihdunta" FromRole="HaihduntaPartner" />
+        <NavigationProperty Name="Jaanpaksuus" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_Jaanpaksuus_Hydrologiarajapinta_Models_Jaanpaksuus_JaanpaksuusPartner" ToRole="Jaanpaksuus" FromRole="JaanpaksuusPartner" />
+        <NavigationProperty Name="JaatJaanlahto" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_JaatJaanlahto_Hydrologiarajapinta_Models_JaatJaanlahto_JaatJaanlahtoPartner" ToRole="JaatJaanlahto" FromRole="JaatJaanlahtoPartner" />
+        <NavigationProperty Name="SadantaAlue" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_SadantaAlue_Hydrologiarajapinta_Models_SadantaAlue_SadantaAluePartner" ToRole="SadantaAlue" FromRole="SadantaAluePartner" />
+        <NavigationProperty Name="Valuma" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_Valuma_Hydrologiarajapinta_Models_Valuma_ValumaPartner" ToRole="Valuma" FromRole="ValumaPartner" />
+        <NavigationProperty Name="Omistaja" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_Omistaja_Hydrologiarajapinta_Models_Omistaja_OmistajaPartner" ToRole="Omistaja" FromRole="OmistajaPartner" />
+        <NavigationProperty Name="Tila" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_Tila_Hydrologiarajapinta_Models_Tila_TilaPartner" ToRole="Tila" FromRole="TilaPartner" />
+        <NavigationProperty Name="Laitteisto" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_Laitteisto_Hydrologiarajapinta_Models_Laitteisto_LaitteistoPartner" ToRole="Laitteisto" FromRole="LaitteistoPartner" />
+        <NavigationProperty Name="Suure" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_Suure_Hydrologiarajapinta_Models_Suure_SuurePartner" ToRole="Suure" FromRole="SuurePartner" />
+        <NavigationProperty Name="Havainnointi" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_Havainnointi_Hydrologiarajapinta_Models_Havainnointi_HavainnointiPartner" ToRole="Havainnointi" FromRole="HavainnointiPartner" />
+      </EntityType>
+      <EntityType Name="Jaanpaksuus">
+        <Key>
+          <PropertyRef Name="Paikka_Id" />
+          <PropertyRef Name="Aika" />
+          <PropertyRef Name="Lippu_Id" />
+        </Key>
+        <Property Name="Paikka_Id" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Aika" Type="Edm.DateTime" Nullable="false" />
+        <Property Name="Arvo" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Lippu_Id" Type="Edm.Int16" Nullable="false" />
+        <NavigationProperty Name="Lippu" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Jaanpaksuus_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartner" ToRole="Lippu" FromRole="LippuPartner" />
+        <NavigationProperty Name="Paikka" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Jaanpaksuus_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner" ToRole="Paikka" FromRole="PaikkaPartner" />
+      </EntityType>
+      <EntityType Name="JaatJaanlahto">
+        <Key>
+          <PropertyRef Name="Paikka_Id" />
+          <PropertyRef Name="Arvo" />
+          <PropertyRef Name="Lippu_id" />
+        </Key>
+        <Property Name="Paikka_Id" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Arvo" Type="Edm.DateTime" Nullable="false" />
+        <Property Name="Lippu_id" Type="Edm.Int16" Nullable="false" />
+        <NavigationProperty Name="Lippu" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_JaatJaanlahto_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartner" ToRole="Lippu" FromRole="LippuPartner" />
+        <NavigationProperty Name="Paikka" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_JaatJaanlahto_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner" ToRole="Paikka" FromRole="PaikkaPartner" />
+      </EntityType>
+      <EntityType Name="Jakso">
+        <Key>
+          <PropertyRef Name="Jakso_id" />
+        </Key>
+        <Property Name="Jakso_id" Type="Edm.Int16" Nullable="false" />
+        <Property Name="Kuvaus" Type="Edm.String" Nullable="false" />
+        <Property Name="KuvausEng" Type="Edm.String" />
+        <NavigationProperty Name="SadantaAlue" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Jakso_SadantaAlue_Hydrologiarajapinta_Models_SadantaAlue_SadantaAluePartner" ToRole="SadantaAlue" FromRole="SadantaAluePartner" />
+      </EntityType>
+      <EntityType Name="SadantaAlue">
+        <Key>
+          <PropertyRef Name="Paikka_Id" />
+          <PropertyRef Name="Aika" />
+          <PropertyRef Name="Jakso_Id" />
+        </Key>
+        <Property Name="Paikka_Id" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Aika" Type="Edm.DateTime" Nullable="false" />
+        <Property Name="Jakso_Id" Type="Edm.Int16" Nullable="false" />
+        <Property Name="Arvo" Type="Edm.Int32" Nullable="false" />
+        <NavigationProperty Name="Jakso" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_SadantaAlue_Jakso_Hydrologiarajapinta_Models_Jakso_JaksoPartner" ToRole="Jakso" FromRole="JaksoPartner" />
+        <NavigationProperty Name="Paikka" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_SadantaAlue_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner" ToRole="Paikka" FromRole="PaikkaPartner" />
+      </EntityType>
+      <EntityType Name="Laitteisto">
+        <Key>
+          <PropertyRef Name="Laitteisto_Id" />
+        </Key>
+        <Property Name="Laitteisto_Id" Type="Edm.Int16" Nullable="false" />
+        <Property Name="Nimi" Type="Edm.String" Nullable="false" />
+        <Property Name="SuureKoodit" Type="Edm.String" />
+        <NavigationProperty Name="Paikka" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Laitteisto_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner" ToRole="Paikka" FromRole="PaikkaPartner" />
+      </EntityType>
+      <EntityType Name="LampoPintavesi">
+        <Key>
+          <PropertyRef Name="Paikka_Id" />
+          <PropertyRef Name="Aika" />
+        </Key>
+        <Property Name="Paikka_Id" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Aika" Type="Edm.DateTime" Nullable="false" />
+        <Property Name="Arvo" Type="Edm.Decimal" Nullable="false" />
+        <NavigationProperty Name="Paikka" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_LampoPintavesi_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner" ToRole="Paikka" FromRole="PaikkaPartner" />
+      </EntityType>
+      <EntityType Name="LampoLuotaus">
+        <Key>
+          <PropertyRef Name="Paikka_Id" />
+          <PropertyRef Name="Aika" />
+          <PropertyRef Name="Syvyys" />
+        </Key>
+        <Property Name="Paikka_Id" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Aika" Type="Edm.DateTime" Nullable="false" />
+        <Property Name="Arvo" Type="Edm.Decimal" Nullable="false" />
+        <Property Name="Syvyys" Type="Edm.Decimal" Nullable="false" />
+        <NavigationProperty Name="Paikka" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_LampoLuotaus_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner" ToRole="Paikka" FromRole="PaikkaPartner" />
+      </EntityType>
+      <EntityType Name="LumiPiste">
+        <Key>
+          <PropertyRef Name="Paikka_Id" />
+          <PropertyRef Name="Aika" />
+        </Key>
+        <Property Name="Paikka_Id" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Aika" Type="Edm.DateTime" Nullable="false" />
+        <Property Name="Arvo" Type="Edm.Decimal" Nullable="false" />
+        <Property Name="Lippu_Id" Type="Edm.Int16" />
+        <NavigationProperty Name="Lippu" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_LumiPiste_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartner" ToRole="Lippu" FromRole="LippuPartner" />
+        <NavigationProperty Name="Paikka" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_LumiPiste_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner" ToRole="Paikka" FromRole="PaikkaPartner" />
+      </EntityType>
+      <EntityType Name="Valuma">
+        <Key>
+          <PropertyRef Name="Paikka_Id" />
+          <PropertyRef Name="Aika" />
+        </Key>
+        <Property Name="Paikka_Id" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Aika" Type="Edm.DateTime" Nullable="false" />
+        <Property Name="Arvo" Type="Edm.Decimal" Nullable="false" />
+        <Property Name="Arvomax" Type="Edm.Decimal" />
+        <Property Name="lippu_id" Type="Edm.Int16" />
+        <NavigationProperty Name="Lippu" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Valuma_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartner" ToRole="Lippu" FromRole="LippuPartner" />
+        <NavigationProperty Name="Paikka" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Valuma_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner" ToRole="Paikka" FromRole="PaikkaPartner" />
+      </EntityType>
+      <EntityType Name="Vedenkorkeus">
+        <Key>
+          <PropertyRef Name="Paikka_Id" />
+          <PropertyRef Name="Aika" />
+        </Key>
+        <Property Name="Paikka_Id" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Aika" Type="Edm.DateTime" Nullable="false" />
+        <Property Name="Arvo" Type="Edm.Int32" Nullable="false" />
+        <Property Name="ArvoMin" Type="Edm.Int32" />
+        <Property Name="ArvoMax" Type="Edm.Int32" />
+        <Property Name="Lippu_id" Type="Edm.Int16" />
+        <NavigationProperty Name="Lippu" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Vedenkorkeus_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartner" ToRole="Lippu" FromRole="LippuPartner" />
+        <NavigationProperty Name="Paikka" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Vedenkorkeus_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner" ToRole="Paikka" FromRole="PaikkaPartner" />
+      </EntityType>
+      <EntityType Name="Virtaama">
+        <Key>
+          <PropertyRef Name="Paikka_Id" />
+          <PropertyRef Name="Aika" />
+        </Key>
+        <Property Name="Paikka_Id" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Aika" Type="Edm.DateTime" Nullable="false" />
+        <Property Name="Arvo" Type="Edm.Decimal" Nullable="false" />
+        <Property Name="ArvoMin" Type="Edm.Decimal" />
+        <Property Name="ArvoMax" Type="Edm.Decimal" />
+        <Property Name="Lippu_id" Type="Edm.Int16" />
+        <Property Name="huomautus" Type="Edm.String" />
+        <NavigationProperty Name="Lippu" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Virtaama_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartner" ToRole="Lippu" FromRole="LippuPartner" />
+        <NavigationProperty Name="Paikka" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Virtaama_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner" ToRole="Paikka" FromRole="PaikkaPartner" />
+      </EntityType>
+      <EntityType Name="LumiAlue">
+        <Key>
+          <PropertyRef Name="Paikka_Id" />
+          <PropertyRef Name="Aika" />
+        </Key>
+        <Property Name="Paikka_Id" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Aika" Type="Edm.DateTime" Nullable="false" />
+        <Property Name="Arvo" Type="Edm.Decimal" Nullable="false" />
+        <NavigationProperty Name="Paikka" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_LumiAlue_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner" ToRole="Paikka" FromRole="PaikkaPartner" />
+      </EntityType>
+      <EntityType Name="Omistaja">
+        <Key>
+          <PropertyRef Name="Omistaja_Id" />
+        </Key>
+        <Property Name="Omistaja_Id" Type="Edm.Int16" Nullable="false" />
+        <Property Name="Nimi" Type="Edm.String" Nullable="false" />
+        <Property Name="Lyhenne" Type="Edm.String" />
+        <NavigationProperty Name="Paikka" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Omistaja_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner" ToRole="Paikka" FromRole="PaikkaPartner" />
+      </EntityType>
+      <EntityType Name="Suure">
+        <Key>
+          <PropertyRef Name="Suure_Id" />
+        </Key>
+        <Property Name="Suure_Id" Type="Edm.Int16" Nullable="false" />
+        <Property Name="Suurekoodi" Type="Edm.String" Nullable="false" />
+        <Property Name="Nimi" Type="Edm.String" Nullable="false" />
+        <Property Name="Kuvaus" Type="Edm.String" Nullable="false" />
+        <Property Name="NimiEng" Type="Edm.String" Nullable="false" />
+        <Property Name="KuvausEng" Type="Edm.String" />
+        <Property Name="Yksikko" Type="Edm.String" />
+        <Property Name="taulunnimi" Type="Edm.String" />
+        <Property Name="DatataulunNimi" Type="Edm.String" />
+        <NavigationProperty Name="Paikka" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Suure_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner" ToRole="Paikka" FromRole="PaikkaPartner" />
+      </EntityType>
+      <EntityType Name="Tila">
+        <Key>
+          <PropertyRef Name="Tila_Id" />
+        </Key>
+        <Property Name="Tila_Id" Type="Edm.Int16" Nullable="false" />
+        <Property Name="Nimi" Type="Edm.String" Nullable="false" />
+        <NavigationProperty Name="Paikka" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Tila_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner" ToRole="Paikka" FromRole="PaikkaPartner" />
+      </EntityType>
+      <EntityType Name="VedenkTasoTieto">
+        <Key>
+          <PropertyRef Name="Paikka_Id" />
+          <PropertyRef Name="TasoKoordinaatisto" />
+        </Key>
+        <Property Name="Paikka_Id" Type="Edm.Int32" Nullable="false" />
+        <Property Name="Korkeustaso_Id" Type="Edm.Int16" Nullable="false" />
+        <Property Name="TasoKoordinaatisto" Type="Edm.String" Nullable="false" />
+        <Property Name="Tasokorjaus" Type="Edm.Int32" />
+        <NavigationProperty Name="Paikka" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_VedenkTasoTieto_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner" ToRole="Paikka" FromRole="PaikkaPartner" />
+        <NavigationProperty Name="Korkeustaso" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_VedenkTasoTieto_Korkeustaso_Hydrologiarajapinta_Models_Korkeustaso_KorkeustasoPartner" ToRole="Korkeustaso" FromRole="KorkeustasoPartner" />
+      </EntityType>
+      <EntityType Name="Korkeustaso">
+        <Key>
+          <PropertyRef Name="Korkeustaso_Id" />
+        </Key>
+        <Property Name="Korkeustaso_Id" Type="Edm.Int16" Nullable="false" />
+        <Property Name="KorkeustasoLyhenne" Type="Edm.String" Nullable="false" />
+      </EntityType>
+      <EntityType Name="Havainnointi">
+        <Key>
+          <PropertyRef Name="Paikka_Id" />
+        </Key>
+        <Property Name="Paikka_Id" Type="Edm.Int32" Nullable="false" />
+        <Property Name="AikaAlku" Type="Edm.DateTime" />
+        <Property Name="AikaLoppu" Type="Edm.DateTime" />
+        <Property Name="AikaTarkistus" Type="Edm.DateTime" />
+        <Property Name="ArvoMin" Type="Edm.Decimal" />
+        <Property Name="ArvoMax" Type="Edm.Decimal" />
+        <Property Name="PintaAla" Type="Edm.Decimal" />
+        <Property Name="JarviPros" Type="Edm.Decimal" />
+        <Property Name="VanhaNro" Type="Edm.String" />
+        <Property Name="ArvoYlitysMax" Type="Edm.Decimal" />
+        <NavigationProperty Name="Paikka" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Havainnointi_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner" ToRole="Paikka" FromRole="PaikkaPartner" />
+      </EntityType>
+      <EntityType Name="TauluKuvaus">
+        <Key>
+          <PropertyRef Name="Nimi" />
+        </Key>
+        <Property Name="Nimi" Type="Edm.String" Nullable="false" />
+        <Property Name="KuvausSuomeksi" Type="Edm.String" />
+        <Property Name="KuvausEnglanniksi" Type="Edm.String" />
+        <Property Name="KuvausRuotsiksi" Type="Edm.String" />
+        <NavigationProperty Name="SarakeKuvaukset" Relationship="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_TauluKuvaus_SarakeKuvaukset_Hydrologiarajapinta_Models_SarakeKuvaus_SarakeKuvauksetPartner" ToRole="SarakeKuvaukset" FromRole="SarakeKuvauksetPartner" />
+      </EntityType>
+      <EntityType Name="SarakeKuvaus">
+        <Key>
+          <PropertyRef Name="Nimi" />
+          <PropertyRef Name="Taulu" />
+        </Key>
+        <Property Name="Nimi" Type="Edm.String" Nullable="false" />
+        <Property Name="Taulu" Type="Edm.String" Nullable="false" />
+        <Property Name="Tyyppi" Type="Edm.String" />
+        <Property Name="KuvausSuomeksi" Type="Edm.String" />
+        <Property Name="KuvausEnglanniksi" Type="Edm.String" />
+        <Property Name="KuvausRuotsiksi" Type="Edm.String" />
+      </EntityType>
+      <Association Name="Hydrologiarajapinta_Models_Haihdunta_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartner">
+        <End Type="Hydrologiarajapinta.Models.Lippu" Role="Lippu" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.Haihdunta" Role="LippuPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Haihdunta_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="Paikka" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.Haihdunta" Role="PaikkaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Lippu_Haihdunta_Hydrologiarajapinta_Models_Haihdunta_HaihduntaPartner">
+        <End Type="Hydrologiarajapinta.Models.Haihdunta" Role="Haihdunta" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Lippu" Role="HaihduntaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Lippu_Jaanpaksuus_Hydrologiarajapinta_Models_Jaanpaksuus_JaanpaksuusPartner">
+        <End Type="Hydrologiarajapinta.Models.Jaanpaksuus" Role="Jaanpaksuus" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Lippu" Role="JaanpaksuusPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Lippu_JaatJaanlahto_Hydrologiarajapinta_Models_JaatJaanlahto_JaatJaanlahtoPartner">
+        <End Type="Hydrologiarajapinta.Models.JaatJaanlahto" Role="JaatJaanlahto" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Lippu" Role="JaatJaanlahtoPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Lippu_LumiPiste_Hydrologiarajapinta_Models_LumiPiste_LumiPistePartner">
+        <End Type="Hydrologiarajapinta.Models.LumiPiste" Role="LumiPiste" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Lippu" Role="LumiPistePartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Lippu_Valuma_Hydrologiarajapinta_Models_Valuma_ValumaPartner">
+        <End Type="Hydrologiarajapinta.Models.Valuma" Role="Valuma" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Lippu" Role="ValumaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Lippu_Vedenkorkeus_Hydrologiarajapinta_Models_Vedenkorkeus_VedenkorkeusPartner">
+        <End Type="Hydrologiarajapinta.Models.Vedenkorkeus" Role="Vedenkorkeus" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Lippu" Role="VedenkorkeusPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Lippu_Virtaama_Hydrologiarajapinta_Models_Virtaama_VirtaamaPartner">
+        <End Type="Hydrologiarajapinta.Models.Virtaama" Role="Virtaama" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Lippu" Role="VirtaamaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Paikka_Vedenkorkeus_Hydrologiarajapinta_Models_Vedenkorkeus_VedenkorkeusPartner">
+        <End Type="Hydrologiarajapinta.Models.Vedenkorkeus" Role="Vedenkorkeus" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="VedenkorkeusPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Paikka_Virtaama_Hydrologiarajapinta_Models_Virtaama_VirtaamaPartner">
+        <End Type="Hydrologiarajapinta.Models.Virtaama" Role="Virtaama" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="VirtaamaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Paikka_LampoPintavesi_Hydrologiarajapinta_Models_LampoPintavesi_LampoPintavesiPartner">
+        <End Type="Hydrologiarajapinta.Models.LampoPintavesi" Role="LampoPintavesi" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="LampoPintavesiPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Paikka_LampoLuotaus_Hydrologiarajapinta_Models_LampoLuotaus_LampoLuotausPartner">
+        <End Type="Hydrologiarajapinta.Models.LampoLuotaus" Role="LampoLuotaus" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="LampoLuotausPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Paikka_LumiAlue_Hydrologiarajapinta_Models_LumiAlue_LumiAluePartner">
+        <End Type="Hydrologiarajapinta.Models.LumiAlue" Role="LumiAlue" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="LumiAluePartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Paikka_LumiPiste_Hydrologiarajapinta_Models_LumiPiste_LumiPistePartner">
+        <End Type="Hydrologiarajapinta.Models.LumiPiste" Role="LumiPiste" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="LumiPistePartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Paikka_Haihdunta_Hydrologiarajapinta_Models_Haihdunta_HaihduntaPartner">
+        <End Type="Hydrologiarajapinta.Models.Haihdunta" Role="Haihdunta" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="HaihduntaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Paikka_Jaanpaksuus_Hydrologiarajapinta_Models_Jaanpaksuus_JaanpaksuusPartner">
+        <End Type="Hydrologiarajapinta.Models.Jaanpaksuus" Role="Jaanpaksuus" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="JaanpaksuusPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Paikka_JaatJaanlahto_Hydrologiarajapinta_Models_JaatJaanlahto_JaatJaanlahtoPartner">
+        <End Type="Hydrologiarajapinta.Models.JaatJaanlahto" Role="JaatJaanlahto" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="JaatJaanlahtoPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Paikka_SadantaAlue_Hydrologiarajapinta_Models_SadantaAlue_SadantaAluePartner">
+        <End Type="Hydrologiarajapinta.Models.SadantaAlue" Role="SadantaAlue" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="SadantaAluePartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Paikka_Valuma_Hydrologiarajapinta_Models_Valuma_ValumaPartner">
+        <End Type="Hydrologiarajapinta.Models.Valuma" Role="Valuma" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="ValumaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Paikka_Omistaja_Hydrologiarajapinta_Models_Omistaja_OmistajaPartner">
+        <End Type="Hydrologiarajapinta.Models.Omistaja" Role="Omistaja" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="OmistajaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Paikka_Tila_Hydrologiarajapinta_Models_Tila_TilaPartner">
+        <End Type="Hydrologiarajapinta.Models.Tila" Role="Tila" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="TilaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Paikka_Laitteisto_Hydrologiarajapinta_Models_Laitteisto_LaitteistoPartner">
+        <End Type="Hydrologiarajapinta.Models.Laitteisto" Role="Laitteisto" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="LaitteistoPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Paikka_Suure_Hydrologiarajapinta_Models_Suure_SuurePartner">
+        <End Type="Hydrologiarajapinta.Models.Suure" Role="Suure" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="SuurePartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Paikka_Havainnointi_Hydrologiarajapinta_Models_Havainnointi_HavainnointiPartner">
+        <End Type="Hydrologiarajapinta.Models.Havainnointi" Role="Havainnointi" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="HavainnointiPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Jaanpaksuus_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartner">
+        <End Type="Hydrologiarajapinta.Models.Lippu" Role="Lippu" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.Jaanpaksuus" Role="LippuPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Jaanpaksuus_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="Paikka" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.Jaanpaksuus" Role="PaikkaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_JaatJaanlahto_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartner">
+        <End Type="Hydrologiarajapinta.Models.Lippu" Role="Lippu" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.JaatJaanlahto" Role="LippuPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_JaatJaanlahto_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="Paikka" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.JaatJaanlahto" Role="PaikkaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Jakso_SadantaAlue_Hydrologiarajapinta_Models_SadantaAlue_SadantaAluePartner">
+        <End Type="Hydrologiarajapinta.Models.SadantaAlue" Role="SadantaAlue" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Jakso" Role="SadantaAluePartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_SadantaAlue_Jakso_Hydrologiarajapinta_Models_Jakso_JaksoPartner">
+        <End Type="Hydrologiarajapinta.Models.Jakso" Role="Jakso" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.SadantaAlue" Role="JaksoPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_SadantaAlue_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="Paikka" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.SadantaAlue" Role="PaikkaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Laitteisto_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="Paikka" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Laitteisto" Role="PaikkaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_LampoPintavesi_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="Paikka" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.LampoPintavesi" Role="PaikkaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_LampoLuotaus_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="Paikka" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.LampoLuotaus" Role="PaikkaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_LumiPiste_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartner">
+        <End Type="Hydrologiarajapinta.Models.Lippu" Role="Lippu" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.LumiPiste" Role="LippuPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_LumiPiste_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="Paikka" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.LumiPiste" Role="PaikkaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Valuma_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartner">
+        <End Type="Hydrologiarajapinta.Models.Lippu" Role="Lippu" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.Valuma" Role="LippuPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Valuma_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="Paikka" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.Valuma" Role="PaikkaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Vedenkorkeus_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartner">
+        <End Type="Hydrologiarajapinta.Models.Lippu" Role="Lippu" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.Vedenkorkeus" Role="LippuPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Vedenkorkeus_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="Paikka" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.Vedenkorkeus" Role="PaikkaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Virtaama_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartner">
+        <End Type="Hydrologiarajapinta.Models.Lippu" Role="Lippu" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.Virtaama" Role="LippuPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Virtaama_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="Paikka" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.Virtaama" Role="PaikkaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_LumiAlue_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="Paikka" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.LumiAlue" Role="PaikkaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Omistaja_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="Paikka" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Omistaja" Role="PaikkaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Suure_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="Paikka" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Suure" Role="PaikkaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Tila_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="Paikka" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.Tila" Role="PaikkaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_VedenkTasoTieto_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="Paikka" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.VedenkTasoTieto" Role="PaikkaPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_VedenkTasoTieto_Korkeustaso_Hydrologiarajapinta_Models_Korkeustaso_KorkeustasoPartner">
+        <End Type="Hydrologiarajapinta.Models.Korkeustaso" Role="Korkeustaso" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.VedenkTasoTieto" Role="KorkeustasoPartner" Multiplicity="0..1" />
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_Havainnointi_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+        <End Type="Hydrologiarajapinta.Models.Paikka" Role="Paikka" Multiplicity="0..1" />
+        <End Type="Hydrologiarajapinta.Models.Havainnointi" Role="PaikkaPartner" Multiplicity="0..1" />
+        <ReferentialConstraint>
+          <Principal Role="Paikka">
+            <PropertyRef Name="Paikka_Id" />
+          </Principal>
+          <Dependent Role="PaikkaPartner">
+            <PropertyRef Name="Paikka_Id" />
+          </Dependent>
+        </ReferentialConstraint>
+      </Association>
+      <Association Name="Hydrologiarajapinta_Models_TauluKuvaus_SarakeKuvaukset_Hydrologiarajapinta_Models_SarakeKuvaus_SarakeKuvauksetPartner">
+        <End Type="Hydrologiarajapinta.Models.SarakeKuvaus" Role="SarakeKuvaukset" Multiplicity="*" />
+        <End Type="Hydrologiarajapinta.Models.TauluKuvaus" Role="SarakeKuvauksetPartner" Multiplicity="0..1" />
+      </Association>
+    </Schema>
+    <Schema Namespace="Default" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <EntityContainer Name="Container" m:IsDefaultEntityContainer="true">
+        <EntitySet Name="Haihdunta" EntityType="Hydrologiarajapinta.Models.Haihdunta" />
+        <EntitySet Name="Lippu" EntityType="Hydrologiarajapinta.Models.Lippu" />
+        <EntitySet Name="Paikka" EntityType="Hydrologiarajapinta.Models.Paikka" />
+        <EntitySet Name="Jaanpaksuus" EntityType="Hydrologiarajapinta.Models.Jaanpaksuus" />
+        <EntitySet Name="JaatJaanlahto" EntityType="Hydrologiarajapinta.Models.JaatJaanlahto" />
+        <EntitySet Name="Jakso" EntityType="Hydrologiarajapinta.Models.Jakso" />
+        <EntitySet Name="SadantaAlue" EntityType="Hydrologiarajapinta.Models.SadantaAlue" />
+        <EntitySet Name="Laitteisto" EntityType="Hydrologiarajapinta.Models.Laitteisto" />
+        <EntitySet Name="LampoPintavesi" EntityType="Hydrologiarajapinta.Models.LampoPintavesi" />
+        <EntitySet Name="LampoLuotaus" EntityType="Hydrologiarajapinta.Models.LampoLuotaus" />
+        <EntitySet Name="LumiPiste" EntityType="Hydrologiarajapinta.Models.LumiPiste" />
+        <EntitySet Name="Valuma" EntityType="Hydrologiarajapinta.Models.Valuma" />
+        <EntitySet Name="Vedenkorkeus" EntityType="Hydrologiarajapinta.Models.Vedenkorkeus" />
+        <EntitySet Name="Virtaama" EntityType="Hydrologiarajapinta.Models.Virtaama" />
+        <EntitySet Name="LumiAlue" EntityType="Hydrologiarajapinta.Models.LumiAlue" />
+        <EntitySet Name="Omistaja" EntityType="Hydrologiarajapinta.Models.Omistaja" />
+        <EntitySet Name="Suure" EntityType="Hydrologiarajapinta.Models.Suure" />
+        <EntitySet Name="Tila" EntityType="Hydrologiarajapinta.Models.Tila" />
+        <EntitySet Name="VedenkTasoTieto" EntityType="Hydrologiarajapinta.Models.VedenkTasoTieto" />
+        <EntitySet Name="Korkeustaso" EntityType="Hydrologiarajapinta.Models.Korkeustaso" />
+        <EntitySet Name="Havainnointi" EntityType="Hydrologiarajapinta.Models.Havainnointi" />
+        <EntitySet Name="TauluKuvaus" EntityType="Hydrologiarajapinta.Models.TauluKuvaus" />
+        <EntitySet Name="SarakeKuvaus" EntityType="Hydrologiarajapinta.Models.SarakeKuvaus" />
+        <AssociationSet Name="Hydrologiarajapinta_Models_Haihdunta_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Haihdunta_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartner">
+          <End Role="LippuPartner" EntitySet="Haihdunta" />
+          <End Role="Lippu" EntitySet="Lippu" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Haihdunta_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Haihdunta_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+          <End Role="PaikkaPartner" EntitySet="Haihdunta" />
+          <End Role="Paikka" EntitySet="Paikka" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Lippu_Haihdunta_Hydrologiarajapinta_Models_Haihdunta_HaihduntaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Lippu_Haihdunta_Hydrologiarajapinta_Models_Haihdunta_HaihduntaPartner">
+          <End Role="HaihduntaPartner" EntitySet="Lippu" />
+          <End Role="Haihdunta" EntitySet="Haihdunta" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Lippu_Jaanpaksuus_Hydrologiarajapinta_Models_Jaanpaksuus_JaanpaksuusPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Lippu_Jaanpaksuus_Hydrologiarajapinta_Models_Jaanpaksuus_JaanpaksuusPartner">
+          <End Role="JaanpaksuusPartner" EntitySet="Lippu" />
+          <End Role="Jaanpaksuus" EntitySet="Jaanpaksuus" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Lippu_JaatJaanlahto_Hydrologiarajapinta_Models_JaatJaanlahto_JaatJaanlahtoPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Lippu_JaatJaanlahto_Hydrologiarajapinta_Models_JaatJaanlahto_JaatJaanlahtoPartner">
+          <End Role="JaatJaanlahtoPartner" EntitySet="Lippu" />
+          <End Role="JaatJaanlahto" EntitySet="JaatJaanlahto" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Lippu_LumiPiste_Hydrologiarajapinta_Models_LumiPiste_LumiPistePartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Lippu_LumiPiste_Hydrologiarajapinta_Models_LumiPiste_LumiPistePartner">
+          <End Role="LumiPistePartner" EntitySet="Lippu" />
+          <End Role="LumiPiste" EntitySet="LumiPiste" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Lippu_Valuma_Hydrologiarajapinta_Models_Valuma_ValumaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Lippu_Valuma_Hydrologiarajapinta_Models_Valuma_ValumaPartner">
+          <End Role="ValumaPartner" EntitySet="Lippu" />
+          <End Role="Valuma" EntitySet="Valuma" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Lippu_Vedenkorkeus_Hydrologiarajapinta_Models_Vedenkorkeus_VedenkorkeusPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Lippu_Vedenkorkeus_Hydrologiarajapinta_Models_Vedenkorkeus_VedenkorkeusPartner">
+          <End Role="VedenkorkeusPartner" EntitySet="Lippu" />
+          <End Role="Vedenkorkeus" EntitySet="Vedenkorkeus" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Lippu_Virtaama_Hydrologiarajapinta_Models_Virtaama_VirtaamaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Lippu_Virtaama_Hydrologiarajapinta_Models_Virtaama_VirtaamaPartner">
+          <End Role="VirtaamaPartner" EntitySet="Lippu" />
+          <End Role="Virtaama" EntitySet="Virtaama" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Paikka_Vedenkorkeus_Hydrologiarajapinta_Models_Vedenkorkeus_VedenkorkeusPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_Vedenkorkeus_Hydrologiarajapinta_Models_Vedenkorkeus_VedenkorkeusPartner">
+          <End Role="VedenkorkeusPartner" EntitySet="Paikka" />
+          <End Role="Vedenkorkeus" EntitySet="Vedenkorkeus" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Paikka_Virtaama_Hydrologiarajapinta_Models_Virtaama_VirtaamaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_Virtaama_Hydrologiarajapinta_Models_Virtaama_VirtaamaPartner">
+          <End Role="VirtaamaPartner" EntitySet="Paikka" />
+          <End Role="Virtaama" EntitySet="Virtaama" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Paikka_LampoPintavesi_Hydrologiarajapinta_Models_LampoPintavesi_LampoPintavesiPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_LampoPintavesi_Hydrologiarajapinta_Models_LampoPintavesi_LampoPintavesiPartner">
+          <End Role="LampoPintavesiPartner" EntitySet="Paikka" />
+          <End Role="LampoPintavesi" EntitySet="LampoPintavesi" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Paikka_LampoLuotaus_Hydrologiarajapinta_Models_LampoLuotaus_LampoLuotausPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_LampoLuotaus_Hydrologiarajapinta_Models_LampoLuotaus_LampoLuotausPartner">
+          <End Role="LampoLuotausPartner" EntitySet="Paikka" />
+          <End Role="LampoLuotaus" EntitySet="LampoLuotaus" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Paikka_LumiAlue_Hydrologiarajapinta_Models_LumiAlue_LumiAluePartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_LumiAlue_Hydrologiarajapinta_Models_LumiAlue_LumiAluePartner">
+          <End Role="LumiAluePartner" EntitySet="Paikka" />
+          <End Role="LumiAlue" EntitySet="LumiAlue" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Paikka_LumiPiste_Hydrologiarajapinta_Models_LumiPiste_LumiPistePartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_LumiPiste_Hydrologiarajapinta_Models_LumiPiste_LumiPistePartner">
+          <End Role="LumiPistePartner" EntitySet="Paikka" />
+          <End Role="LumiPiste" EntitySet="LumiPiste" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Paikka_Haihdunta_Hydrologiarajapinta_Models_Haihdunta_HaihduntaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_Haihdunta_Hydrologiarajapinta_Models_Haihdunta_HaihduntaPartner">
+          <End Role="HaihduntaPartner" EntitySet="Paikka" />
+          <End Role="Haihdunta" EntitySet="Haihdunta" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Paikka_Jaanpaksuus_Hydrologiarajapinta_Models_Jaanpaksuus_JaanpaksuusPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_Jaanpaksuus_Hydrologiarajapinta_Models_Jaanpaksuus_JaanpaksuusPartner">
+          <End Role="JaanpaksuusPartner" EntitySet="Paikka" />
+          <End Role="Jaanpaksuus" EntitySet="Jaanpaksuus" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Paikka_JaatJaanlahto_Hydrologiarajapinta_Models_JaatJaanlahto_JaatJaanlahtoPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_JaatJaanlahto_Hydrologiarajapinta_Models_JaatJaanlahto_JaatJaanlahtoPartner">
+          <End Role="JaatJaanlahtoPartner" EntitySet="Paikka" />
+          <End Role="JaatJaanlahto" EntitySet="JaatJaanlahto" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Paikka_SadantaAlue_Hydrologiarajapinta_Models_SadantaAlue_SadantaAluePartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_SadantaAlue_Hydrologiarajapinta_Models_SadantaAlue_SadantaAluePartner">
+          <End Role="SadantaAluePartner" EntitySet="Paikka" />
+          <End Role="SadantaAlue" EntitySet="SadantaAlue" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Paikka_Valuma_Hydrologiarajapinta_Models_Valuma_ValumaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_Valuma_Hydrologiarajapinta_Models_Valuma_ValumaPartner">
+          <End Role="ValumaPartner" EntitySet="Paikka" />
+          <End Role="Valuma" EntitySet="Valuma" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Paikka_Omistaja_Hydrologiarajapinta_Models_Omistaja_OmistajaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_Omistaja_Hydrologiarajapinta_Models_Omistaja_OmistajaPartner">
+          <End Role="OmistajaPartner" EntitySet="Paikka" />
+          <End Role="Omistaja" EntitySet="Omistaja" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Paikka_Tila_Hydrologiarajapinta_Models_Tila_TilaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_Tila_Hydrologiarajapinta_Models_Tila_TilaPartner">
+          <End Role="TilaPartner" EntitySet="Paikka" />
+          <End Role="Tila" EntitySet="Tila" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Paikka_Laitteisto_Hydrologiarajapinta_Models_Laitteisto_LaitteistoPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_Laitteisto_Hydrologiarajapinta_Models_Laitteisto_LaitteistoPartner">
+          <End Role="LaitteistoPartner" EntitySet="Paikka" />
+          <End Role="Laitteisto" EntitySet="Laitteisto" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Paikka_Suure_Hydrologiarajapinta_Models_Suure_SuurePartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_Suure_Hydrologiarajapinta_Models_Suure_SuurePartner">
+          <End Role="SuurePartner" EntitySet="Paikka" />
+          <End Role="Suure" EntitySet="Suure" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Paikka_Havainnointi_Hydrologiarajapinta_Models_Havainnointi_HavainnointiPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Paikka_Havainnointi_Hydrologiarajapinta_Models_Havainnointi_HavainnointiPartner">
+          <End Role="HavainnointiPartner" EntitySet="Paikka" />
+          <End Role="Havainnointi" EntitySet="Havainnointi" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Jaanpaksuus_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Jaanpaksuus_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartner">
+          <End Role="LippuPartner" EntitySet="Jaanpaksuus" />
+          <End Role="Lippu" EntitySet="Lippu" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Jaanpaksuus_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Jaanpaksuus_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+          <End Role="PaikkaPartner" EntitySet="Jaanpaksuus" />
+          <End Role="Paikka" EntitySet="Paikka" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_JaatJaanlahto_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_JaatJaanlahto_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartner">
+          <End Role="LippuPartner" EntitySet="JaatJaanlahto" />
+          <End Role="Lippu" EntitySet="Lippu" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_JaatJaanlahto_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_JaatJaanlahto_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+          <End Role="PaikkaPartner" EntitySet="JaatJaanlahto" />
+          <End Role="Paikka" EntitySet="Paikka" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Jakso_SadantaAlue_Hydrologiarajapinta_Models_SadantaAlue_SadantaAluePartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Jakso_SadantaAlue_Hydrologiarajapinta_Models_SadantaAlue_SadantaAluePartner">
+          <End Role="SadantaAluePartner" EntitySet="Jakso" />
+          <End Role="SadantaAlue" EntitySet="SadantaAlue" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_SadantaAlue_Jakso_Hydrologiarajapinta_Models_Jakso_JaksoPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_SadantaAlue_Jakso_Hydrologiarajapinta_Models_Jakso_JaksoPartner">
+          <End Role="JaksoPartner" EntitySet="SadantaAlue" />
+          <End Role="Jakso" EntitySet="Jakso" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_SadantaAlue_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_SadantaAlue_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+          <End Role="PaikkaPartner" EntitySet="SadantaAlue" />
+          <End Role="Paikka" EntitySet="Paikka" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Laitteisto_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Laitteisto_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+          <End Role="PaikkaPartner" EntitySet="Laitteisto" />
+          <End Role="Paikka" EntitySet="Paikka" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_LampoPintavesi_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_LampoPintavesi_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+          <End Role="PaikkaPartner" EntitySet="LampoPintavesi" />
+          <End Role="Paikka" EntitySet="Paikka" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_LampoLuotaus_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_LampoLuotaus_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+          <End Role="PaikkaPartner" EntitySet="LampoLuotaus" />
+          <End Role="Paikka" EntitySet="Paikka" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_LumiPiste_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_LumiPiste_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartner">
+          <End Role="LippuPartner" EntitySet="LumiPiste" />
+          <End Role="Lippu" EntitySet="Lippu" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_LumiPiste_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_LumiPiste_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+          <End Role="PaikkaPartner" EntitySet="LumiPiste" />
+          <End Role="Paikka" EntitySet="Paikka" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Valuma_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Valuma_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartner">
+          <End Role="LippuPartner" EntitySet="Valuma" />
+          <End Role="Lippu" EntitySet="Lippu" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Valuma_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Valuma_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+          <End Role="PaikkaPartner" EntitySet="Valuma" />
+          <End Role="Paikka" EntitySet="Paikka" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Vedenkorkeus_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Vedenkorkeus_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartner">
+          <End Role="LippuPartner" EntitySet="Vedenkorkeus" />
+          <End Role="Lippu" EntitySet="Lippu" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Vedenkorkeus_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Vedenkorkeus_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+          <End Role="PaikkaPartner" EntitySet="Vedenkorkeus" />
+          <End Role="Paikka" EntitySet="Paikka" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Virtaama_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Virtaama_Lippu_Hydrologiarajapinta_Models_Lippu_LippuPartner">
+          <End Role="LippuPartner" EntitySet="Virtaama" />
+          <End Role="Lippu" EntitySet="Lippu" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Virtaama_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Virtaama_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+          <End Role="PaikkaPartner" EntitySet="Virtaama" />
+          <End Role="Paikka" EntitySet="Paikka" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_LumiAlue_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_LumiAlue_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+          <End Role="PaikkaPartner" EntitySet="LumiAlue" />
+          <End Role="Paikka" EntitySet="Paikka" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Omistaja_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Omistaja_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+          <End Role="PaikkaPartner" EntitySet="Omistaja" />
+          <End Role="Paikka" EntitySet="Paikka" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Suure_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Suure_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+          <End Role="PaikkaPartner" EntitySet="Suure" />
+          <End Role="Paikka" EntitySet="Paikka" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Tila_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Tila_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+          <End Role="PaikkaPartner" EntitySet="Tila" />
+          <End Role="Paikka" EntitySet="Paikka" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_VedenkTasoTieto_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_VedenkTasoTieto_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+          <End Role="PaikkaPartner" EntitySet="VedenkTasoTieto" />
+          <End Role="Paikka" EntitySet="Paikka" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_VedenkTasoTieto_Korkeustaso_Hydrologiarajapinta_Models_Korkeustaso_KorkeustasoPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_VedenkTasoTieto_Korkeustaso_Hydrologiarajapinta_Models_Korkeustaso_KorkeustasoPartner">
+          <End Role="KorkeustasoPartner" EntitySet="VedenkTasoTieto" />
+          <End Role="Korkeustaso" EntitySet="Korkeustaso" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_Havainnointi_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_Havainnointi_Paikka_Hydrologiarajapinta_Models_Paikka_PaikkaPartner">
+          <End Role="PaikkaPartner" EntitySet="Havainnointi" />
+          <End Role="Paikka" EntitySet="Paikka" />
+        </AssociationSet>
+        <AssociationSet Name="Hydrologiarajapinta_Models_TauluKuvaus_SarakeKuvaukset_Hydrologiarajapinta_Models_SarakeKuvaus_SarakeKuvauksetPartnerSet" Association="Hydrologiarajapinta.Models.Hydrologiarajapinta_Models_TauluKuvaus_SarakeKuvaukset_Hydrologiarajapinta_Models_SarakeKuvaus_SarakeKuvauksetPartner">
+          <End Role="SarakeKuvauksetPartner" EntitySet="TauluKuvaus" />
+          <End Role="SarakeKuvaukset" EntitySet="SarakeKuvaus" />
+        </AssociationSet>
+      </EntityContainer>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>
