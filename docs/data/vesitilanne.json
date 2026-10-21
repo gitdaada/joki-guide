@@ -1,5 +1,5 @@
 {
- "paivitetty": "2026-10-21T11:11:15Z",
+ "paivitetty": "2026-10-21T11:14:09Z",
  "joet": [
   {
    "id": "poroeno",
@@ -107,9 +107,12 @@
  "loki": [
   "poroeno: 11 Syken asemaa rajauksella",
   "poroeno: asemaehdokkaat Rommaeno/Vedenkorkeus 0.1 km",
+  "Syke Rommaeno/Vedenkorkeus: ei dataa",
   "poroeno: sadeasema Enontekiö Kilpisjärvi kyläkeskus (42 km), 14 vrk 8.7 mm",
   "poroeno: normaali (sade)",
   "lataseno: asemaehdokkaat Poroeno, Munnikurkkio/Vedenkorkeus 0.1 km, Rommaeno/Vedenkorkeus 0.1 km",
+  "Syke Poroeno, Munnikurkkio/Vedenkorkeus: ei dataa",
+  "Syke Rommaeno/Vedenkorkeus: ei dataa",
   "lataseno: sadeasema Enontekiö Kaaresuvanto (33 km), 14 vrk 5.5 mm",
   "lataseno: normaali (sade)",
   "hossa: 12 Syken asemaa rajauksella",
