@@ -1,7 +1,7 @@
 /* Joki guiden service worker: sovellus, tasot ja tallennetut kartat toimivat ilman verkkoa. */
 'use strict';
 
-var SHELL_CACHE = 'jg-shell-0.2.2';
+var SHELL_CACHE = 'jg-shell-0.2.3';
 var TILE_CACHE = 'jg-tiles-v1';
 var SHELL = [
   './', 'index.html', 'app.js', 'core.js', 'style.css', 'manifest.webmanifest',
@@ -77,7 +77,12 @@ self.addEventListener('fetch', function (e) {
     return;
   }
   if (url.origin !== self.location.origin) return; // sää ja OSM suoraan verkosta, ei välimuistiin
-  if (req.mode === 'navigate') { e.respondWith(staleWhileRevalidate(e, new Request('index.html'))); return; }
+  if (req.mode === 'navigate') {
+    // Vain sovelluksen oma etusivu tulee välimuistista; muut sivut saman polun alla haetaan verkosta.
+    var rel = url.pathname.slice(new URL(self.registration.scope).pathname.length);
+    if (rel === '' || rel === 'index.html') e.respondWith(staleWhileRevalidate(e, new Request('index.html')));
+    return;
+  }
   if (/\/data\/vesitilanne\.json$/.test(url.pathname)) { e.respondWith(networkFirst(req)); return; }
   e.respondWith(staleWhileRevalidate(e, req));
 });

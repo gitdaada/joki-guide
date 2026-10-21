@@ -3,7 +3,7 @@
   'use strict';
 
   var JG = window.JG;
-  var VERSION = '0.2.2';
+  var VERSION = '0.2.3';
   var MML_BASE = 'https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0';
   var MML_LAYERS = {
     maastokartta: { path: 'maastokartta', ext: 'png', estKB: 20, name: 'Maastokartta' },
