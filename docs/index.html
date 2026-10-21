@@ -19,12 +19,16 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="map" aria-label="Kartta"></div>
+  <div id="map" aria-label="Kartta"><div id="mapView"></div></div>
 
   <header class="topbar">
     <div class="brand">Joki guide</div>
     <button id="layerChip" class="chip" type="button">Tasot</button>
   </header>
+
+  <button id="btnNorth" class="fab north-btn hidden" type="button" aria-label="Käännä pohjoinen ylös" title="Käännä pohjoinen ylös">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><g id="northNeedle"><path d="M12 2.5l4.2 9.5H7.8z" fill="#e5484d"/><path d="M12 21.5l4.2-9.5H7.8z" fill="currentColor"/></g></svg>
+  </button>
 
   <div id="compass" class="compass hidden" aria-live="polite">
     <svg class="rose" viewBox="0 0 100 100" aria-hidden="true">
@@ -91,6 +95,7 @@
 
   <script src="vendor/leaflet/leaflet.js"></script>
   <script src="core.js"></script>
+  <script src="rotate.js"></script>
   <script src="solmut.js"></script>
   <script src="app.js"></script>
 </body>

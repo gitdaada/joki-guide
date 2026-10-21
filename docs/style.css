@@ -20,7 +20,16 @@ html, body { height: 100%; margin: 0; background: var(--bg); color: var(--text);
 button, input, select { font: inherit; color: inherit; }
 .hidden { display: none !important; }
 
-#map { position: fixed; inset: 0; background: #cfd8d4; }
+#map { position: fixed; inset: 0; overflow: hidden; background: #cfd8d4; }
+/* Karttasäiliö on näkymän lävistäjän kokoinen ja kääntyy keskipisteensä ympäri (rotate.js). */
+#mapView { position: absolute; inset: 0; z-index: 0; background: #cfd8d4; }
+/* Mittakaava ja tekijätiedot pysyvät pystyssä näkymän reunoilla. */
+.mk-map-ui { position: absolute; inset: 0; z-index: 1; pointer-events: none; background: transparent !important; }
+/* Tekstit ja tupakuvakkeet pysyvät pystyssä, vaikka kartta on käännetty. */
+.mk-rot .dist-label span, .mk-rot .hut-icon svg { transform: rotate(var(--mk-unrot, 0deg)); }
+.mk-rot .wind-icon .lbl { transform: translateX(-50%) rotate(var(--mk-unrot, 0deg)); }
+.north-btn { position: fixed; right: 10px; top: calc(60px + var(--safe-t)); z-index: 1000; }
+.north-btn svg { width: 30px; height: 30px; }
 .leaflet-container { font: inherit; }
 .leaflet-control-attribution { font-size: 10.5px; }
 
@@ -107,8 +116,9 @@ table.wx th { color: var(--muted); font-weight: 600; font-size: 13px; }
 .wind-icon svg { width: 22px; height: 22px; }
 .wind-icon .lbl { position: absolute; top: 32px; left: 50%; transform: translateX(-50%); font-size: 11px; font-weight: 700;
   color: #0b1418; background: rgba(255, 255, 255, 0.85); border-radius: 6px; padding: 0 4px; white-space: nowrap; }
-.dist-label { background: rgba(255, 255, 255, 0.9); color: #0b1418; border-radius: 6px; padding: 1px 5px;
-  font-size: 12px; font-weight: 700; white-space: nowrap; border: 0; box-shadow: none; }
+.dist-label { background: none; border: 0; box-shadow: none; }
+.dist-label span { display: inline-block; background: rgba(255, 255, 255, 0.9); color: #0b1418; border-radius: 6px; padding: 1px 5px;
+  font-size: 12px; font-weight: 700; white-space: nowrap; }
 .dist-label::before { display: none; }
 .leaflet-popup-content { margin: 10px 12px; }
 .pop-t { font-weight: 700; }
@@ -133,3 +143,12 @@ table.wx th { color: var(--muted); font-weight: 600; font-size: 13px; }
 .knot-steps li.on { color: var(--text); font-weight: 600; }
 .knot-tips { margin: 0; padding-left: 18px; }
 .knot-tips li { margin: 4px 0; }
+
+/* Autiotuvat */
+.hut-icon { background: none; border: 0; }
+.hut-icon svg { display: block; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55)); }
+.hut-compass { display: flex; gap: 16px; align-items: center; margin: 8px 0 14px; }
+.hut-dial { width: 150px; height: 150px; flex: none; }
+.hut-read .d { font-size: 30px; font-weight: 800; line-height: 1.1; }
+.hut-read .b { font-weight: 600; margin-top: 4px; }
+.hut-read .s { color: var(--muted); font-size: 13px; margin-top: 6px; }

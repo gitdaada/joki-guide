@@ -3,7 +3,7 @@
   'use strict';
 
   var JG = window.JG;
-  var VERSION = '0.2.7';
+  var VERSION = '0.3.0';
   var MML_BASE = 'https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0';
   var MML_LAYERS = {
     maastokartta: { path: 'maastokartta', ext: 'png', estKB: 20, name: 'Maastokartta' },
@@ -31,7 +31,7 @@
     del: function (k) { try { localStorage.removeItem('jg.' + k); } catch (e) { /* estetty */ } }
   };
 
-  var settings = Object.assign({ apiKey: '', basemap: 'maastokartta', rings: false, water: false, offlineMaxZ: 15, hidden: {} },
+  var settings = Object.assign({ apiKey: '', basemap: 'maastokartta', rings: false, water: false, huts: true, dayHuts: true, offlineMaxZ: 15, hidden: {} },
     store.get('settings', {}));
   settings.apiKey = JG.sanitizeKey(settings.apiKey);
   if (!MML_LAYERS[settings.basemap]) settings.basemap = 'maastokartta';
@@ -86,8 +86,24 @@
   // --- Kartta ----------------------------------------------------------------------------
 
   var view = store.get('view', DEFAULT_VIEW);
-  var map = L.map('map', { zoomControl: false, attributionControl: true, maxZoom: 18, tap: true })
+  // Kartan voi kääntää kahdella sormella (rotate.js, sama kuin Metsäkartassa). Pohjoinen palautetaan painikkeesta.
+  if (window.MKRotate) MKRotate.layout($('map'), $('mapView'));
+  var map = L.map('mapView', { zoomControl: false, attributionControl: true, maxZoom: 18, tap: true, keyboard: false })
     .setView(view.c, view.z);
+  var rot = window.MKRotate ? MKRotate.install(map, $('map'), { threshold: 12 }) : null;
+  function fitB(bounds, pad) {
+    var p = [pad || 30, pad || 30];
+    return rot ? rot.fitBounds(bounds, { paddingTopLeft: p, paddingBottomRight: p }) : map.fitBounds(bounds, { padding: p });
+  }
+  function updateNorth() {
+    var b = rot ? rot.getBearing() : 0, turned = Math.abs(((b % 360) + 540) % 360 - 180) > 0.5;
+    $('btnNorth').classList.toggle('hidden', !turned);
+    $('northNeedle').setAttribute('transform', 'rotate(' + b.toFixed(1) + ' 12 12)');
+  }
+  if (rot) {
+    map.on('rotate', updateNorth);
+    $('btnNorth').addEventListener('click', function () { map.setBearing(0); });
+  }
   L.control.scale({ imperial: false, position: 'bottomleft' }).addTo(map);
   map.attributionControl.setPrefix(false);
   map.on('moveend', function () {
@@ -137,7 +153,7 @@
 
   function featureTitle(p) { return p.nimi || p.name || 'Kohde'; }
   function popupFor(p) {
-    var box = h('div', null, [h('div', { class: 'pop-t', text: featureTitle(p) })]);
+    var box = h('div');
     if (p.tyyppi) box.appendChild(h('div', { class: 'muted small', text: p.tyyppi }));
     if (p.kuvaus || p.description) box.appendChild(h('p', { class: 'small', text: p.kuvaus || p.description }));
     return box;
@@ -151,9 +167,8 @@
         return L.circleMarker(ll, { radius: 7, color: '#0b1418', weight: 2, fillColor: c, fillOpacity: 1 });
       },
       onEachFeature: function (f, l) {
-        l.bindPopup(function () { return popupFor(f.properties || {}); });
-        // Tietoikkuna pysäyttää napautuksen, joten mittauksen aikana piste lisätään tässä ja ikkuna suljetaan.
-        l.on('click', function (e) { if (S.measuring) { l.closePopup(); addMeasurePoint(e.latlng); } });
+        // Napautus avaa tiedot paneeliin. Mittauksen aikana napautus menee kartalle, joka lisää pisteen.
+        l.on('click', function () { if (!S.measuring) openInfo(featureTitle(f.properties || {}), popupFor(f.properties || {})); });
       }
     });
   }
@@ -187,16 +202,17 @@
     var e = S.layers[id];
     if (!e) return;
     var b = JG.areaBbox(e.gj);
-    if (b) map.fitBounds([[b[1], b[0]], [b[3], b[2]]], { padding: [30, 30] });
+    if (b) fitB([[b[1], b[0]], [b[3], b[2]]], 30);
   }
 
   // --- Sijainti ja etäisyysrenkaat ------------------------------------------------------
 
   var posMarker = null, accCircle = null, rings = L.layerGroup().addTo(map);
 
-  function startLocate() {
+  /** noFollow: sijainti haetaan, mutta karttaa ei siirretä sen mukana (esim. tupaikkunaa varten). */
+  function startLocate(noFollow) {
     if (!navigator.geolocation) { toast('Laite ei tue sijaintia.'); return; }
-    S.follow = true;
+    S.follow = !noFollow;
     $('btnLocate').classList.add('on');
     S.watchId = navigator.geolocation.watchPosition(onPos, function (err) {
       toast(err.code === 1 ? 'Sijaintilupa evätty. Salli sijainti selaimen asetuksista.' : 'Sijaintia ei saatu.');
@@ -216,8 +232,8 @@
       posMarker = L.circleMarker(ll, { radius: 8, color: '#fff', weight: 3, fillColor: '#2f80ed', fillOpacity: 1 }).addTo(map);
       accCircle = L.circle(ll, { radius: S.pos.acc, color: '#2f80ed', weight: 1, fillOpacity: 0.08, interactive: false }).addTo(map);
     } else { posMarker.setLatLng(ll); accCircle.setLatLng(ll).setRadius(S.pos.acc); }
-    if (first || S.follow) map.setView(ll, first ? Math.max(map.getZoom(), 13) : map.getZoom());
-    drawRings(); updateMeasureText(); updateCompassTarget();
+    if (S.follow) map.setView(ll, first ? Math.max(map.getZoom(), 13) : map.getZoom());
+    drawRings(); updateMeasureText(); updateCompassTarget(); drawTargetLine(); updateHutCompass();
     if (S.sheet === 'sos') renderSos();
   }
   map.on('dragstart', function () { S.follow = false; });
@@ -253,8 +269,35 @@
     $('roseDial').setAttribute('transform', 'rotate(' + (-hd).toFixed(1) + ' 50 50)');
     $('headingText').textContent = Math.round(hd) + '° ' + JG.dirName(hd);
     updateCompassTarget();
+    updateHutCompass();
   }
-  function compassTarget() { return S.pts.length ? S.pts[S.pts.length - 1] : null; }
+  // Puhelimen suuntaa kuunnellaan vain, kun jokin näkymä tarvitsee sitä (kompassi tai tupaikkuna).
+  var orientUsers = {};
+  function setOrientUser(name, on) {
+    var active = Object.keys(orientUsers).length > 0;
+    if (!on) {
+      delete orientUsers[name];
+      if (active && !Object.keys(orientUsers).length) { window.removeEventListener(ORIENT_EVENT, onOrient); S.heading = null; }
+      return Promise.resolve(true);
+    }
+    if (active) { orientUsers[name] = true; return Promise.resolve(true); }
+    var ask = (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === 'function') ?
+      DeviceOrientationEvent.requestPermission().catch(function () { return 'denied'; }) : Promise.resolve('granted');
+    return ask.then(function (st) {
+      if (st !== 'granted') return false;
+      if (!Object.keys(orientUsers).length) window.addEventListener(ORIENT_EVENT, onOrient);
+      orientUsers[name] = true;
+      return true;
+    });
+  }
+  function compassTarget() { return S.target || (S.pts.length ? S.pts[S.pts.length - 1] : null); }
+  var targetLayer = L.layerGroup().addTo(map);
+  /** Katkoviiva sijainnista suunnistuskohteeseen. */
+  function drawTargetLine() {
+    targetLayer.clearLayers();
+    if (!S.target || !S.pos) return;
+    L.polyline([[S.pos.lat, S.pos.lon], [S.target.lat, S.target.lng]], { color: '#ffd166', weight: 3, dashArray: '6 8', interactive: false }).addTo(targetLayer);
+  }
   function updateCompassTarget() {
     var t = compassTarget(), arrow = $('targetArrow'), txt = $('targetText');
     if (!S.compassOn) return;
@@ -264,23 +307,20 @@
       return;
     }
     var brg = JG.bearing(S.pos.lat, S.pos.lon, t.lat, t.lng), d = JG.distance(S.pos.lat, S.pos.lon, t.lat, t.lng);
-    txt.textContent = 'Kohde ' + JG.fmtDistance(d) + ', suunta ' + Math.round(brg) + '° ' + JG.dirName(brg);
+    txt.textContent = (S.target ? S.target.nimi : 'Kohde') + ' ' + JG.fmtDistance(d) + ', suunta ' + Math.round(brg) + '° ' + JG.dirName(brg);
     if (S.heading === null) { arrow.classList.add('hidden'); return; }
     arrow.classList.remove('hidden');
     arrow.setAttribute('transform', 'rotate(' + (brg - S.heading).toFixed(1) + ' 50 50)');
   }
   function toggleCompass() {
     if (S.compassOn) {
-      window.removeEventListener(ORIENT_EVENT, onOrient);
-      S.compassOn = false; S.heading = null;
+      setOrientUser('compass', false);
+      S.compassOn = false; S.target = null; drawTargetLine();
       $('compass').classList.add('hidden'); $('btnCompass').classList.remove('on');
-      return;
+      return Promise.resolve();
     }
-    var ask = (window.DeviceOrientationEvent && typeof DeviceOrientationEvent.requestPermission === 'function') ?
-      DeviceOrientationEvent.requestPermission().catch(function () { return 'denied'; }) : Promise.resolve('granted');
-    ask.then(function (st) {
-      if (st !== 'granted') { toast('Kompassin käyttölupa evätty.'); return; }
-      window.addEventListener(ORIENT_EVENT, onOrient);
+    return setOrientUser('compass', true).then(function (ok) {
+      if (!ok) { toast('Kompassin käyttölupa evätty.'); return; }
       S.compassOn = true;
       $('compass').classList.remove('hidden'); $('btnCompass').classList.add('on');
       $('headingText').textContent = '–';
@@ -641,6 +681,22 @@
     body.appendChild(h('div', { class: 'row' }, [h('button', { class: 'btn', type: 'button', text: 'Tuo GeoJSON-tiedosto', onclick: function () { file.click(); } })]));
     body.appendChild(h('p', { class: 'muted small', text: 'Piirrä taso geojson.io:ssa ja tallenna se GeoJSON-muodossa. Tuotu taso tallentuu vain tähän laitteeseen.' }));
 
+    body.appendChild(h('h3', { text: 'Autiotuvat' }));
+    var hc = h('input', { type: 'checkbox', checked: settings.huts });
+    hc.addEventListener('change', function () { settings.huts = hc.checked; saveSettings(); setHutsVisible(hc.checked); renderLayers(); });
+    body.appendChild(h('label', { class: 'check' }, [hc, h('span', { text: 'Näytä Lapin ja Kainuun autiotuvat' })]));
+    if (settings.huts) {
+      var dc = h('input', { type: 'checkbox', checked: settings.dayHuts });
+      dc.addEventListener('change', function () { settings.dayHuts = dc.checked; saveSettings(); drawHuts(); renderLayers(); });
+      body.appendChild(h('label', { class: 'check' }, [dc, h('span', { text: 'Näytä myös päivätuvat ja kodat' })]));
+    }
+    if (S.huts) {
+      var n = S.huts.features.filter(function (f) { return !isDayHut(f); }).length;
+      body.appendChild(h('p', { class: 'muted small', text: n + ' autiotupaa tai -kammia ja ' + (S.huts.features.length - n) + ' päivätupaa tai kotaa. ' +
+        'Ruskea = autiotupa, vihreä = autiokammi, sininen = päivätupa tai kota. Lähde: © OpenStreetMapin tekijät (ODbL)' +
+        (S.huts.paivitetty ? ', päivitetty ' + fmtDate(S.huts.paivitetty) : '') + '. Napauta tupaa, niin näet suunnan ja etäisyyden.' }));
+    }
+
     body.appendChild(h('h3', { text: 'Vesitilanne' }));
     var wc = h('input', { type: 'checkbox', checked: settings.water });
     wc.addEventListener('change', function () { settings.water = wc.checked; saveSettings(); drawWater(); renderLayers(); });
@@ -834,14 +890,23 @@
   // --- Paneeli ----------------------------------------------------------------------------
 
   function openSheet(name, title) {
+    var was = S.sheet;
     S.sheet = name;
+    if (was && was !== name) onSheetClosed(was);
     $('sheetTitle').textContent = title;
     $('sheet').classList.remove('hidden');
   }
-  function closeSheet() { S.sheet = null; $('sheet').classList.add('hidden'); }
+  function closeSheet() { var was = S.sheet; S.sheet = null; $('sheet').classList.add('hidden'); onSheetClosed(was); }
+  /** Kartan kohteen tiedot paneeliin. */
+  function openInfo(title, content) {
+    openSheet('info', title);
+    var body = $('sheetBody');
+    body.textContent = '';
+    body.appendChild(content);
+  }
   $('sheetClose').addEventListener('click', closeSheet);
 
-  $('btnLocate').addEventListener('click', function () { if (S.watchId !== null) stopLocate(); else startLocate(); });
+  $('btnLocate').addEventListener('click', function () { S.locByHut = false; if (S.watchId !== null) stopLocate(); else startLocate(); });
   $('btnCompass').addEventListener('click', toggleCompass);
   $('btnMeasure').addEventListener('click', function () { setMeasuring(!S.measuring); });
   $('measureUndo').addEventListener('click', function () { S.pts.pop(); drawMeasure(); });
@@ -896,7 +961,7 @@
 
   function waterPopup(j) {
     var c = WATER[j.luokka] || WATER.tuntematon;
-    var box = h('div', null, [h('div', { class: 'pop-t', text: j.nimi }), h('div', { text: 'Vesitilanne: ' + c.nimi })]);
+    var box = h('div', null, [h('p', { text: 'Vesitilanne: ' + c.nimi })]);
     var m = j.mittaus;
     if (m) {
       box.appendChild(h('p', { class: 'small', text: (m.suure === 'virtaama' ? 'Virtaama ' : 'Vedenkorkeus ') + fmtNum(m.arvo, m.yksikko) +
@@ -929,7 +994,7 @@
         var c = (WATER[j.luokka] || WATER.tuntematon).color;
         L.geoJSON(f, { style: { color: '#ffffff', weight: 9, opacity: 0.85, lineCap: 'round' }, interactive: false }).addTo(waterLayer);
         L.geoJSON(f, { style: { color: c, weight: 5, opacity: 1, lineCap: 'round', dashArray: j.luokka ? null : '6 6' } })
-          .bindPopup(function () { return waterPopup(j); }).addTo(waterLayer);
+          .on('click', function () { if (!S.measuring) openInfo(j.nimi, waterPopup(j)); }).addTo(waterLayer);
       });
     });
   }
@@ -962,6 +1027,143 @@
       Object.keys(urls).forEach(function (u) { fetch(u, { credentials: 'omit' }).catch(function () {}); });
     }).catch(function () {});
     fetch('data/vesitilanne.json', { credentials: 'omit' }).catch(function () {});
+    fetch('data/autiotuvat.geojson', { credentials: 'omit' }).catch(function () {});
+  }
+
+  // --- Autiotuvat (Lappi ja Kainuu, OpenStreetMap) ------------------------------------------
+
+  var hutLayer = L.layerGroup();
+  function sv(tag, attrs, parent) {
+    var e = document.createElementNS(SVGNS, tag);
+    Object.keys(attrs || {}).forEach(function (k) { e.setAttribute(k, attrs[k]); });
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  // Autiotupa ruskea, autiokammi vihreä, päivätupa sininen talo, kota sininen kolmio.
+  var HUT_COLORS = { autiotupa: '#9a5b2a', kammi: '#6f7f3a', paivatupa: '#2f6f9a', kota: '#2f6f9a' };
+  function hutIcon(tyyppi) {
+    var s = sv('svg', { viewBox: '0 0 24 24', width: 24, height: 24, 'aria-hidden': 'true' });
+    var o = { fill: HUT_COLORS[tyyppi] || HUT_COLORS.autiotupa, stroke: '#ffffff', 'stroke-width': 1.8, 'stroke-linejoin': 'round' };
+    sv('path', Object.assign({ d: tyyppi === 'kota' ? 'M12 2.5 L21.5 21 H2.5 Z' : 'M12 2.5 L22 11 H19 V21 H5 V11 H2 Z' }, o), s);
+    sv('path', { d: tyyppi === 'kota' ? 'M10.5 21 L12 15 L13.5 21 Z' : 'M10 21 V15 H14 V21 Z', fill: '#ffffff' }, s);
+    return L.divIcon({ className: 'hut-icon', html: s, iconSize: [24, 24], iconAnchor: [12, 14] });
+  }
+  function isDayHut(f) { return f.properties.tyyppi === 'paivatupa' || f.properties.tyyppi === 'kota'; }
+  /** Vain tunnetut kentät; linkit vain luotettaviin osoitteisiin. */
+  function sanitizeHuts(gj) {
+    var okLink = /^https:\/\/([a-z0-9-]+\.)*(luontoon\.fi|metsa\.fi|retkikartta\.fi)\//i;
+    var feats = ((gj && gj.features) || []).filter(function (f) {
+      var c = f && f.geometry && f.geometry.type === 'Point' && f.geometry.coordinates;
+      return c && isFinite(c[0]) && isFinite(c[1]) && Math.abs(c[1]) <= 90 && Math.abs(c[0]) <= 180;
+    }).slice(0, 3000).map(function (f) {
+      var p = f.properties || {}, str = function (v, n) { return typeof v === 'string' ? v.slice(0, n) : ''; };
+      return { type: 'Feature', geometry: { type: 'Point', coordinates: [Number(f.geometry.coordinates[0]), Number(f.geometry.coordinates[1])] },
+        properties: { nimi: str(p.nimi, 80) || 'Autiotupa', tyyppi: HUT_COLORS[p.tyyppi] ? p.tyyppi : 'autiotupa', maakunta: str(p.maakunta, 20),
+          kuvaus: str(p.kuvaus, 600), osm: /^(node|way|relation)\/\d+$/.test(p.osm || '') ? p.osm : '', linkki: okLink.test(p.linkki || '') ? p.linkki : '' } };
+    });
+    return { features: feats, paivitetty: gj && gj.properties && /^\d{4}-\d{2}-\d{2}$/.test(gj.properties.paivitetty || '') ? gj.properties.paivitetty : '' };
+  }
+  function drawHuts() {
+    hutLayer.clearLayers();
+    if (!S.huts) return;
+    S.huts.features.forEach(function (f) {
+      if (isDayHut(f) && !settings.dayHuts) return;
+      var c = f.geometry.coordinates, ll = L.latLng(c[1], c[0]);
+      var m = L.marker(ll, { icon: hutIcon(f.properties.tyyppi), title: f.properties.nimi, keyboard: false });
+      m.on('click', function () { if (S.measuring) addMeasurePoint(ll); else openHut(f); });
+      m.addTo(hutLayer);
+    });
+  }
+  function loadHuts() {
+    if (S.huts) return Promise.resolve(S.huts);
+    return fetch('data/autiotuvat.geojson', { credentials: 'omit' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (gj) { S.huts = sanitizeHuts(gj); drawHuts(); if (S.sheet === 'layers') renderLayers(); return S.huts; });
+  }
+  function setHutsVisible(on) {
+    if (on) { hutLayer.addTo(map); loadHuts().catch(function () { toast('Autiotupia ei voitu ladata.'); }); }
+    else map.removeLayer(hutLayer);
+  }
+
+  function hutLatLng() { var c = S.hut.geometry.coordinates; return { lat: c[1], lng: c[0] }; }
+  function openHut(f) {
+    S.hut = f;
+    openSheet('tupa', f.properties.nimi);
+    if (S.watchId === null) { startLocate(true); S.locByHut = true; }
+    setOrientUser('tupa', true).then(function () { updateHutCompass(); });
+    renderHut();
+  }
+  function onSheetClosed(was) {
+    if (was !== 'tupa') return;
+    setOrientUser('tupa', false);
+    if (S.locByHut) stopLocate();
+    S.locByHut = false;
+    S.hutUI = null;
+  }
+  function renderHut() {
+    if (S.sheet !== 'tupa' || !S.hut) return;
+    var p = S.hut.properties, t = hutLatLng(), body = $('sheetBody');
+    body.textContent = '';
+    if (p.kuvaus) body.appendChild(h('p', { class: 'small', text: p.kuvaus }));
+
+    // Kompassi: kehä kääntyy puhelimen suunnan mukaan, keltainen nuoli osoittaa tuvalle.
+    var svg = sv('svg', { viewBox: '0 0 120 120', class: 'hut-dial', role: 'img', 'aria-label': 'Suunta tuvalle' });
+    sv('circle', { cx: 60, cy: 60, r: 56, fill: '#0b1519', stroke: '#2b4651', 'stroke-width': 2 }, svg);
+    var dial = sv('g', {}, svg);
+    for (var a = 0; a < 360; a += 30) sv('line', { x1: 60, y1: 6, x2: 60, y2: a % 90 ? 11 : 14, stroke: '#a9bcc2', 'stroke-width': a % 90 ? 1.5 : 2.5, transform: 'rotate(' + a + ' 60 60)' }, dial);
+    [['P', 0, '#e5484d'], ['I', 90, '#eef4f5'], ['E', 180, '#eef4f5'], ['L', 270, '#eef4f5']].forEach(function (d) {
+      var tx = sv('text', { x: 60, y: 27, 'text-anchor': 'middle', 'font-size': 12, 'font-weight': 700, fill: d[2], transform: 'rotate(' + d[1] + ' 60 60)' }, dial);
+      tx.textContent = d[0];
+    });
+    sv('path', { d: 'M60 0 L64 6 H56 Z', fill: '#4cc3d9' }, svg); // puhelimen yläreuna
+    var arrow = sv('g', { visibility: 'hidden' }, svg);
+    sv('path', { d: 'M60 30 L60 66', stroke: '#ffd166', 'stroke-width': 4, 'stroke-linecap': 'round' }, arrow);
+    sv('path', { d: 'M60 16 L71 38 L60 33 L49 38 Z', fill: '#ffd166', stroke: '#0b1519', 'stroke-width': 1.5, 'stroke-linejoin': 'round' }, arrow);
+    sv('circle', { cx: 60, cy: 60, r: 4, fill: '#eef4f5' }, svg);
+    var dist = h('div', { class: 'd', text: '–' }), dir = h('div', { class: 'b' }), status = h('div', { class: 's' });
+    body.appendChild(h('div', { class: 'hut-compass' }, [svg, h('div', { class: 'hut-read' }, [dist, dir, status])]));
+    S.hutUI = { dial: dial, arrow: arrow, dist: dist, dir: dir, status: status };
+
+    body.appendChild(h('div', { class: 'row' }, [
+      h('button', { type: 'button', class: 'btn primary', text: 'Suunnista tänne', onclick: navigateToHut }),
+      h('button', { type: 'button', class: 'btn', text: 'Näytä kartalla', onclick: function () { map.setView([t.lat, t.lng], Math.max(map.getZoom(), 14)); closeSheet(); } })
+    ]));
+    var tm = JG.toTM35FIN(t.lat, t.lng);
+    body.appendChild(h('p', { class: 'small muted', text: 'Sijainti: N ' + JG.fmtDM(t.lat) + ', E ' + JG.fmtDM(t.lng) + ' · ETRS-TM35FIN N ' + Math.round(tm.N) + ' E ' + Math.round(tm.E) }));
+    var src = h('p', { class: 'small muted' }, ['Tiedot: © OpenStreetMapin tekijät (ODbL). Tarkista ajantasaiset tiedot ennen retkeä. ']);
+    if (p.linkki) src.appendChild(h('a', { href: p.linkki, target: '_blank', rel: 'noopener noreferrer', text: 'Kohteen sivu' }));
+    if (p.linkki && p.osm) src.appendChild(document.createTextNode(' · '));
+    if (p.osm) src.appendChild(h('a', { href: 'https://www.openstreetmap.org/' + p.osm, target: '_blank', rel: 'noopener noreferrer', text: 'OpenStreetMap' }));
+    body.appendChild(src);
+    updateHutCompass();
+  }
+  function updateHutCompass() {
+    var u = S.hutUI;
+    if (S.sheet !== 'tupa' || !u || !S.hut) return;
+    if (!S.pos) {
+      u.arrow.setAttribute('visibility', 'hidden');
+      u.dist.textContent = '–';
+      u.dir.textContent = 'Odotetaan sijaintia…';
+      u.status.textContent = S.watchId === null ? 'Sijainti ei ole päällä.' : '';
+      return;
+    }
+    var t = hutLatLng(), d = JG.distance(S.pos.lat, S.pos.lon, t.lat, t.lng), brg = JG.bearing(S.pos.lat, S.pos.lon, t.lat, t.lng), hd = S.heading;
+    u.dist.textContent = JG.fmtDistance(d);
+    u.dir.textContent = d < 25 ? 'Olet perillä.' : 'Suunta ' + Math.round(brg) + '° ' + JG.dirName(brg, true);
+    u.arrow.setAttribute('visibility', d < 25 ? 'hidden' : 'visible');
+    u.dial.setAttribute('transform', 'rotate(' + (hd === null ? 0 : -hd).toFixed(1) + ' 60 60)');
+    u.arrow.setAttribute('transform', 'rotate(' + (hd === null ? brg : brg - hd).toFixed(1) + ' 60 60)');
+    u.status.textContent = (hd === null ? 'Puhelimen kompassi ei ole käytössä: nuoli näyttää suunnan kartan pohjoisesta (P ylhäällä).' :
+      'Pidä puhelinta vaakatasossa. Kun nuoli osoittaa ylös, tupa on edessäsi.') +
+      (S.pos.acc > 50 ? ' Sijainnin tarkkuus ± ' + Math.round(S.pos.acc) + ' m.' : '');
+  }
+  function navigateToHut() {
+    var t = hutLatLng();
+    S.target = { lat: t.lat, lng: t.lng, nimi: S.hut.properties.nimi };
+    S.locByHut = false; // sijainti jää päälle suunnistusta varten
+    var go = S.compassOn ? Promise.resolve() : toggleCompass();
+    closeSheet();
+    go.then(function () { updateCompassTarget(); drawTargetLine(); });
+    if (S.pos) fitB([[S.pos.lat, S.pos.lon], [t.lat, t.lng]], 60);
   }
 
   // --- Käynnistys --------------------------------------------------------------------------
@@ -971,6 +1173,7 @@
     if (!store.get('view', null) && ids.length) fitLayer(ids[0]); // ensimmäisellä käynnistyksellä ensimmäinen taso
   });
   if (settings.water) drawWater();
+  if (settings.huts) setHutsVisible(true);
   setTimeout(prefetchForOffline, 4000);
   // Päivitykset: uusi versio otetaan käyttöön, ja käyttäjälle tarjotaan uudelleenlatausta.
   // Asennetussa sovelluksessa ei ole selaimen päivityspainiketta, ja kartta vie vetoeleen.

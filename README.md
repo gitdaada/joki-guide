@@ -9,10 +9,12 @@ Versio 0.2 on testiversio. Testialueina ovat Poroeno Käsivarren erämaa-alueell
 ## Toiminnot
 
 - Maastokartta, taustakartta ja ilmakuva (Maanmittauslaitos), ilman avainta OpenStreetMap
+- Kartan kääntö kahdella sormella, pohjoinen takaisin ylös painikkeesta
 - Offline-tallennus valitun alueen kartoille
 - Omat tasot: geojson.io:ssa piirretyt alueet, kosket, suvannot, tuvat ja reitit
 - Oma sijainti ja etäisyysrenkaat 1, 5 ja 20 km
 - Kompassi ja suunta mittaustyökalulla merkittyyn kohteeseen
+- Lapin ja Kainuun autiotuvat, autiokammit, päivätuvat ja kodat kartalla. Tuvan napautus avaa kuvauksen, kompassin, joka osoittaa tuvan suunnan puhelimen sijainnin ja suunnan mukaan, sekä etäisyyden. *Suunnista tänne* jättää suunnan ja katkoviivan näkyviin kartalle.
 - Etäisyyden ja suunnan mittaus kartalta
 - Sää ja tuuli seuraavat 3 tuntia sijainnissa ja 8 pisteessä 20 km:n kehällä
 - Sadetutkaennuste 0–2 h
@@ -56,17 +58,21 @@ Ajon voi käynnistää käsin: *Actions → Vesitilanne → Run workflow*. GitHu
   - `core.js`: laskenta ilman käyttöliittymää (etäisyys, koordinaatit, aurinko, sää, perhosuositus)
   - `app.js`: käyttöliittymä
   - `solmut.js`: solmuanimaatiot (SVG, piirretään koodista)
+  - `rotate.js`: kartan kääntö (sama moduuli kuin Metsäkartassa)
+  - `data/autiotuvat.geojson`: autiotuvat (päivittyy automaattisesti)
   - `sw.js`: service worker, joka pitää sovelluksen ja tallennetut kartat käytettävissä ilman verkkoa
   - `layers/`: omat GeoJSON-tasot
   - `data/perhot.json`: perhosuositusten säännöt
   - `img/perhot/`: perhojen valokuvat ja piirrokset
-- `pipeline/`: vesitilanteen päivitys GitHub Actionsissa (vain Pythonin standardikirjasto)
+- `pipeline/`: vesitilanteen ja autiotupien päivitys GitHub Actionsissa (vain Pythonin standardikirjasto)
 - `tests/`: testit, ajetaan komennoilla `node tests/core.test.js` ja `python3 tests/test_pipeline.py`
 
 ## Tietosuoja ja tietoturva
 
 - Sovellus ei kerää, tallenna eikä lähetä henkilötietoja. Siinä ei ole kirjautumista, evästeitä, analytiikkaa eikä ulkopuolisia skriptejä.
 - Sijainti käsitellään vain laitteessa. Sääennustetta haettaessa Ilmatieteen laitokselle ja MET Norwaylle lähetetään noin kilometrin tarkkuuteen pyöristetyt koordinaatit.
+- Autiotupien suunta ja etäisyys lasketaan laitteessa sijainnista ja puhelimen kompassista. Niitä ei lähetetä minnekään.
+- OpenStreetMapin karttaruutuja haettaessa OSM:lle kerrotaan vain sovelluksen osoite (OSM:n käyttöehtojen vaatimus), ei sijaintia eikä muuta tietoa.
 - MML:n API-avain, tuodut tasot ja tallennetut kartat ovat vain laitteen selaimessa. Avain lähetetään vain Maanmittauslaitokselle, eikä se tallennu karttavälimuistin avaimiin.
 - Sisältöturvakäytäntö (CSP) sallii yhteydet vain sovellukseen itseensä sekä Maanmittauslaitokselle, OpenStreetMapille, Ilmatieteen laitokselle ja MET Norwaylle.
 - Repossa ei ole API-avaimia, salasanoja eikä henkilötietoja. Älä lisää niitä tiedostoihin.
@@ -78,6 +84,7 @@ Ajon voi käynnistää käsin: *Actions → Vesitilanne → Run workflow*. GitHu
 - Sadetutkaennuste: MET Norway, Nowcast 2.0, CC BY 4.0.
 - Vesitilanne: Suomen ympäristökeskus (Syke), Hydrologiarajapinta, CC BY 4.0; sademäärä: Ilmatieteen laitos, CC BY 4.0.
 - Jokien uomat: © OpenStreetMapin tekijät, ODbL.
+- Autiotuvat: © OpenStreetMapin tekijät, ODbL. Haetaan kuukausittain (`pipeline/autiotuvat.py`, `.github/workflows/autiotuvat.yml`). Varaus- ja vuokratuvat sekä laavut jätetään pois. Tietojen ajantasaisuus kannattaa tarkistaa ylläpitäjältä (useimmiten Metsähallitus, luontoon.fi).
 - Testialueiden tuvat: Metsähallitus (luontoon.fi). Alueiden rajaus on likimääräinen.
 - Perhosuositukset ovat lähtötaulukko yleisesti käytetyistä perhoista, eivät tutkimusdataa.
 - Perhojen valokuvat: Wikimedia Commons, ks. *Perhokuvat* alla.
