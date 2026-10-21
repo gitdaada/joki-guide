@@ -266,7 +266,7 @@
       eachCoord(f.geometry, function (c) { if (!validCoord(c)) ok = false; });
       if (!ok) return;
       var p = f.properties || {}, props = {};
-      ['nimi', 'name', 'tyyppi', 'kuvaus', 'description'].forEach(function (k) {
+      ['nimi', 'name', 'tyyppi', 'kuvaus', 'description', 'joki_id'].forEach(function (k) {
         if (typeof p[k] === 'string' || typeof p[k] === 'number') props[k] = String(p[k]).slice(0, 300);
       });
       out.push({ type: 'Feature', geometry: f.geometry, properties: props });
@@ -330,7 +330,9 @@
         if (!v) return;
         out.push({
           ryhma: g.nimi, vaihe: v.nimi, syvyys: v.syvyys, kuvaus: v.kuvaus, kuva: v.kuva,
-          perhot: (v.perhot || []).map(function (p) { return { nimi: p.nimi, koko: p.koko || sp.koot, kuva: p.kuva || v.kuva }; }),
+          perhot: (v.perhot || []).map(function (p) {
+            return { nimi: p.nimi, koko: p.koko || sp.koot, kuva: p.kuva || v.kuva, kuvaaja: p.kuvaaja, lisenssi: p.lisenssi, lahde: p.lahde };
+          }),
           huom: note
         });
       });
