@@ -3,7 +3,7 @@
   'use strict';
 
   var JG = window.JG;
-  var VERSION = '0.2.5';
+  var VERSION = '0.2.6';
   var MML_BASE = 'https://avoin-karttakuva.maanmittauslaitos.fi/avoin/wmts/1.0.0';
   var MML_LAYERS = {
     maastokartta: { path: 'maastokartta', ext: 'png', estKB: 20, name: 'Maastokartta' },
@@ -169,13 +169,13 @@
       try { addLayerEntry(x.id, x.nimi, JG.cleanGeoJSON(x.gj), true); } catch (e) { /* ohitetaan viallinen */ }
     });
     return fetch('layers/index.json', { credentials: 'omit' }).then(function (r) { return r.json(); }).then(function (idx) {
-      return Promise.all((idx.tasot || []).map(function (t) {
-        if (!/^[a-z0-9_-]+\.geojson$/i.test(t.tiedosto)) return null;
+      var tasot = (idx.tasot || []).filter(function (t) { return /^[a-z0-9_-]+\.geojson$/i.test(t.tiedosto); });
+      return Promise.all(tasot.map(function (t) {
         return fetch('layers/' + t.tiedosto, { credentials: 'omit' }).then(function (r) { return r.json(); }).then(function (gj) {
           addLayerEntry(t.id, t.nimi, JG.cleanGeoJSON(gj), false);
         }).catch(function () { toast('Tasoa ' + t.nimi + ' ei voitu ladata.'); });
-      }));
-    }).catch(function () { /* ilman verkkoa ja välimuistia */ }).then(updateChip);
+      })).then(function () { return tasot.map(function (t) { return t.id; }); });
+    }).catch(function () { return []; /* ilman verkkoa ja välimuistia */ }).then(function (ids) { updateChip(); return ids; });
   }
 
   function updateChip() {
@@ -944,8 +944,8 @@
   // --- Käynnistys --------------------------------------------------------------------------
 
   if (S.wx) drawWind();
-  loadLayers().then(function () {
-    if (!store.get('view', null)) fitLayer('poroeno');
+  loadLayers().then(function (ids) {
+    if (!store.get('view', null) && ids.length) fitLayer(ids[0]); // ensimmäisellä käynnistyksellä ensimmäinen taso
   });
   if (settings.water) drawWater();
   setTimeout(prefetchForOffline, 4000);

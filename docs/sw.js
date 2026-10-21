@@ -1,13 +1,13 @@
 /* Joki guiden service worker: sovellus, tasot ja tallennetut kartat toimivat ilman verkkoa. */
 'use strict';
 
-var SHELL_CACHE = 'jg-shell-0.2.5';
+var SHELL_CACHE = 'jg-shell-0.2.6';
 var TILE_CACHE = 'jg-tiles-v1';
 var SHELL = [
   './', 'app.js', 'core.js', 'style.css', 'manifest.webmanifest',
   'vendor/leaflet/leaflet.js', 'vendor/leaflet/leaflet.css',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
-  'layers/index.json', 'layers/poroeno.geojson', 'layers/hossa.geojson', 'data/perhot.json',
+  'layers/index.json', 'data/perhot.json', // tasotiedostot tallentuvat välimuistiin, kun sovellus lataa ne
   'img/perhot/nymfi.svg', 'img/perhot/toukka.svg', 'img/perhot/kotelo.svg', 'img/perhot/pinturi.svg',
   'img/perhot/aikuinen-korento.svg', 'img/perhot/aikuinen-vesiperhonen.svg', 'img/perhot/aikuinen-koskikorento.svg',
   'img/perhot/surviainen.svg', 'img/perhot/putkiperho.svg'
