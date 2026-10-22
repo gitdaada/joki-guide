@@ -1,5 +1,5 @@
 {
- "paivitetty": "2026-10-21T14:47:20Z",
+ "paivitetty": "2026-10-22T04:57:47Z",
  "joet": [
   {
    "id": "poroeno",
@@ -8,15 +8,15 @@
    "luokka": "normaali",
    "menetelma": "sade",
    "sade14": {
-    "mm": 8.7,
+    "mm": 6.0,
     "asema": "Enontekiö Kilpisjärvi kyläkeskus",
     "etaisyys_km": 41.8,
-    "p25": 4.9,
-    "p75": 23.8,
+    "p25": 4.6,
+    "p75": 17.8,
     "vuodet": 15,
     "jakso": [
-     "2026-10-07",
-     "2026-10-20"
+     "2026-10-08",
+     "2026-10-21"
     ],
     "luokka": "normaali"
    }
@@ -31,12 +31,12 @@
     "mm": 5.5,
     "asema": "Enontekiö Kaaresuvanto",
     "etaisyys_km": 32.5,
-    "p25": 2.6,
-    "p75": 27.4,
+    "p25": 4.4,
+    "p75": 24.4,
     "vuodet": 15,
     "jakso": [
-     "2026-10-07",
-     "2026-10-20"
+     "2026-10-08",
+     "2026-10-21"
     ],
     "luokka": "normaali"
    }
@@ -52,11 +52,11 @@
     "asema": "Hossanjärvi - luusua",
     "paikka_id": 1270,
     "etaisyys_km": 0.0,
-    "arvo": 27.6,
-    "aika": "2026-10-21",
+    "arvo": 27.0,
+    "aika": "2026-10-22",
     "yksikko": "m³/s",
-    "p25": 10.17,
-    "p75": 16.5,
+    "p25": 10.14,
+    "p75": 16.47,
     "vuodet": 31,
     "luokka": "korkea"
    },
@@ -64,12 +64,12 @@
     "mm": 28.3,
     "asema": "Suomussalmi Pesiö",
     "etaisyys_km": 59.5,
-    "p25": 20.3,
-    "p75": 39.8,
+    "p25": 21.9,
+    "p75": 42.2,
     "vuodet": 15,
     "jakso": [
-     "2026-10-07",
-     "2026-10-20"
+     "2026-10-08",
+     "2026-10-21"
     ],
     "luokka": "normaali"
    }
@@ -84,12 +84,12 @@
     "mm": 19.4,
     "asema": "Taivalkoski kirkonkylä",
     "etaisyys_km": 52.7,
-    "p25": 19.0,
-    "p75": 39.1,
+    "p25": 17.8,
+    "p75": 36.9,
     "vuodet": 15,
     "jakso": [
-     "2026-10-07",
-     "2026-10-20"
+     "2026-10-08",
+     "2026-10-21"
     ],
     "luokka": "normaali"
    }
@@ -108,7 +108,7 @@
   "poroeno: 11 Syken asemaa rajauksella",
   "poroeno: asemaehdokkaat Rommaeno/Vedenkorkeus 0.1 km",
   "Syke Rommaeno/Vedenkorkeus: ei dataa",
-  "poroeno: sadeasema Enontekiö Kilpisjärvi kyläkeskus (42 km), 14 vrk 8.7 mm",
+  "poroeno: sadeasema Enontekiö Kilpisjärvi kyläkeskus (42 km), 14 vrk 6.0 mm",
   "poroeno: normaali (sade)",
   "lataseno: asemaehdokkaat Poroeno, Munnikurkkio/Vedenkorkeus 0.1 km, Rommaeno/Vedenkorkeus 0.1 km",
   "Syke Poroeno, Munnikurkkio/Vedenkorkeus: ei dataa",
