@@ -1,5 +1,5 @@
 {
- "paivitetty": "2026-10-22T04:57:47Z",
+ "paivitetty": "2026-10-23T04:55:51Z",
  "joet": [
   {
    "id": "poroeno",
@@ -11,12 +11,12 @@
     "mm": 6.0,
     "asema": "Enontekiö Kilpisjärvi kyläkeskus",
     "etaisyys_km": 41.8,
-    "p25": 4.6,
-    "p75": 17.8,
+    "p25": 5.5,
+    "p75": 21.6,
     "vuodet": 15,
     "jakso": [
-     "2026-10-08",
-     "2026-10-21"
+     "2026-10-09",
+     "2026-10-22"
     ],
     "luokka": "normaali"
    }
@@ -25,20 +25,20 @@
    "id": "lataseno",
    "nimi": "Lätäseno",
    "alue": "poroeno",
-   "luokka": "normaali",
+   "luokka": "alhainen",
    "menetelma": "sade",
    "sade14": {
     "mm": 5.5,
     "asema": "Enontekiö Kaaresuvanto",
     "etaisyys_km": 32.5,
-    "p25": 4.4,
-    "p75": 24.4,
+    "p25": 6.5,
+    "p75": 24.6,
     "vuodet": 15,
     "jakso": [
-     "2026-10-08",
-     "2026-10-21"
+     "2026-10-09",
+     "2026-10-22"
     ],
-    "luokka": "normaali"
+    "luokka": "alhainen"
    }
   },
   {
@@ -52,24 +52,24 @@
     "asema": "Hossanjärvi - luusua",
     "paikka_id": 1270,
     "etaisyys_km": 0.0,
-    "arvo": 27.0,
-    "aika": "2026-10-22",
+    "arvo": 26.2,
+    "aika": "2026-10-23",
     "yksikko": "m³/s",
-    "p25": 10.14,
-    "p75": 16.47,
+    "p25": 10.1,
+    "p75": 16.25,
     "vuodet": 31,
     "luokka": "korkea"
    },
    "sade14": {
-    "mm": 28.3,
+    "mm": 28.2,
     "asema": "Suomussalmi Pesiö",
     "etaisyys_km": 59.5,
-    "p25": 21.9,
-    "p75": 42.2,
+    "p25": 19.8,
+    "p75": 42.0,
     "vuodet": 15,
     "jakso": [
-     "2026-10-08",
-     "2026-10-21"
+     "2026-10-09",
+     "2026-10-22"
     ],
     "luokka": "normaali"
    }
@@ -84,12 +84,12 @@
     "mm": 19.4,
     "asema": "Taivalkoski kirkonkylä",
     "etaisyys_km": 52.7,
-    "p25": 17.8,
-    "p75": 36.9,
+    "p25": 15.5,
+    "p75": 36.5,
     "vuodet": 15,
     "jakso": [
-     "2026-10-08",
-     "2026-10-21"
+     "2026-10-09",
+     "2026-10-22"
     ],
     "luokka": "normaali"
    }
@@ -114,10 +114,10 @@
   "Syke Poroeno, Munnikurkkio/Vedenkorkeus: ei dataa",
   "Syke Rommaeno/Vedenkorkeus: ei dataa",
   "lataseno: sadeasema Enontekiö Kaaresuvanto (33 km), 14 vrk 5.5 mm",
-  "lataseno: normaali (sade)",
+  "lataseno: alhainen (sade)",
   "hossa: 12 Syken asemaa rajauksella",
   "hossanjoki: asemaehdokkaat Hossanjärvi - luusua/Virtaama 0.0 km",
-  "hossanjoki: sadeasema Suomussalmi Pesiö (59 km), 14 vrk 28.3 mm",
+  "hossanjoki: sadeasema Suomussalmi Pesiö (59 km), 14 vrk 28.2 mm",
   "hossanjoki: korkea (mittaus)",
   "somerjoki: asemaehdokkaat ei yhtään",
   "somerjoki: sadeasema Taivalkoski kirkonkylä (53 km), 14 vrk 19.4 mm",
